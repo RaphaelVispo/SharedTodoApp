@@ -34,6 +34,10 @@ class _SignupPageState extends State<SignupPage> {
       child: ElevatedButton(
         onPressed: () {
           //call the auth provider here
+          context
+              .read<AuthProvider>()
+              .signUp(emailController.text, passwordController.text);
+          Navigator.pop(context);
         },
         child: const Text('Sign up', style: TextStyle(color: Colors.white)),
       ),

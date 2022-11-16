@@ -1,37 +1,37 @@
 {
   "project_info": {
-    "project_number": "26510599933",
-    "project_id": "cmsc23-c5l-ajhao",
-    "storage_bucket": "cmsc23-c5l-ajhao.appspot.com"
+    "project_number": "539286091451",
+    "project_id": "cmsc23-todo-app-rsvispo",
+    "storage_bucket": "cmsc23-todo-app-rsvispo.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:26510599933:android:26cc1c60220f3b85ad0094",
+        "mobilesdk_app_id": "1:539286091451:android:3441ac53327879f65a9b9e",
         "android_client_info": {
           "package_name": "com.example.week7_networking_discussion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "26510599933-4kgtoa319ihm0ir2fmv5vvm40554ojs6.apps.googleusercontent.com",
+          "client_id": "539286091451-tmpiaqfq2v22nn2ha86gn20fi0q44n57.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD6HGLJ1ECFDPLTeTW419AaJfzPG8YhZXo"
+          "current_key": "AIzaSyCUFYRzhK2prqu8XX07F6dfq1RDi-eg5Y4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "26510599933-4kgtoa319ihm0ir2fmv5vvm40554ojs6.apps.googleusercontent.com",
+              "client_id": "539286091451-tmpiaqfq2v22nn2ha86gn20fi0q44n57.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "26510599933-1i7ocrcoub5gun3f6pbq7n6r83jk8pet.apps.googleusercontent.com",
+              "client_id": "539286091451-0r9pej34fhk66luanda8bccvv3t01lur.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.week7NetworkingDiscussion"
