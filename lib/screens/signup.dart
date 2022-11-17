@@ -9,24 +9,59 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    final email = TextField(
+    final email = TextFormField(
       controller: emailController,
       decoration: const InputDecoration(
         hintText: "Email",
       ),
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+        if (!value.contains('@')) {
+          return 'Email is invalid, must contain @';
+        }
+        if (!value.contains('.')) {
+          return 'Email is invalid, must contain .';
+        }
+
+        return null;
+      },
+
+
     );
 
-    final password = TextField(
+    final password = TextFormField(
       controller: passwordController,
       obscureText: true,
       decoration: const InputDecoration(
         hintText: 'Password',
       ),
+
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+        if (value.length <= 6) {
+          return 'The length should be more than 6';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
+
     );
 
     final SignupButton = Padding(
@@ -34,10 +69,13 @@ class _SignupPageState extends State<SignupPage> {
       child: ElevatedButton(
         onPressed: () {
           //call the auth provider here
-          context
-              .read<AuthProvider>()
-              .signUp(emailController.text, passwordController.text);
-          Navigator.pop(context);
+          if (_formKey.currentState!.validate()){
+            context
+                .read<AuthProvider>()
+                .signUp(emailController.text, passwordController.text);
+            Navigator.pop(context);
+          }
+
         },
         child: const Text('Sign up', style: TextStyle(color: Colors.white)),
       ),
@@ -65,10 +103,16 @@ class _SignupPageState extends State<SignupPage> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25),
             ),
-            email,
-            password,
-            SignupButton,
-            backButton
+            Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    email,
+                    password,
+                    SignupButton,
+                    backButton
+                  ],
+                ))
           ],
         ),
       ),
