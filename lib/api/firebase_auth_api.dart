@@ -7,19 +7,19 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
 
 class FirebaseAuthAPI {
-  // static final FirebaseAuth auth = FirebaseAuth.instance;
+  static final FirebaseAuth auth = FirebaseAuth.instance;
 
-  // static final FirebaseFirestore db = FirebaseFirestore.instance;
+  static final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final db = FakeFirebaseFirestore();
+  // final db = FakeFirebaseFirestore();
 
-  final auth = MockFirebaseAuth(
-    mockUser: MockUser(
-    isAnonymous: false,
-    uid: 'someuid',
-    email: 'charlie@paddyspub.com',
-    displayName: 'Charlie',
-  ));
+  // final auth = MockFirebaseAuth(
+  //   mockUser: MockUser(
+  //   isAnonymous: false,
+  //   uid: 'someuid',
+  //   email: 'charlie@paddyspub.com',
+  //   displayName: 'Charlie',
+  // ));
 
 
   Stream<User?> getUser() {
