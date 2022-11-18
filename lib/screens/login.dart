@@ -10,11 +10,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+
+    final _formKey = GlobalKey<FormState>();
 
     final email = TextFormField(
       key: const Key('emailField'),
@@ -22,6 +23,9 @@ class _LoginPageState extends State<LoginPage> {
       decoration: const InputDecoration(
         hintText: "Email",
       ),
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
@@ -32,10 +36,8 @@ class _LoginPageState extends State<LoginPage> {
         if (!value.contains('.')) {
           return 'Email is invalid, must contain .';
         }
+
         return null;
-      },
-      onChanged: (value) {
-        _formKey.currentState!.validate();
       },
     );
 
@@ -50,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (value.length < 7) {
+        if (value.length <= 5) {
           return 'The length should be more than 6';
         }
         return null;
@@ -65,11 +67,13 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            context
-                .read<AuthProvider>()
-                .signIn(emailController.text, passwordController.text);
+          if (_formKey.currentState!.validate()){
+          context
+            .read<AuthProvider>()
+            .signIn(emailController.text, passwordController.text);
+
           }
+
         },
         child: const Text('Log In', style: TextStyle(color: Colors.white)),
       ),
@@ -80,6 +84,9 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         onPressed: () async {
+
+ 
+
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const SignupPage(),
@@ -101,17 +108,15 @@ class _LoginPageState extends State<LoginPage> {
               "Login",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25),
-            ),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    email,
-                    password,
-                    loginButton,
-                    signUpButton,
-                  ],
-                ))
+            ), Form(
+              key: _formKey,
+              child: Column(children: [
+              email,
+              password,
+              loginButton,
+              signUpButton,
+            ],))
+
           ],
         ),
       ),
