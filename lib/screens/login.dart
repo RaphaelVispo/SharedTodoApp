@@ -30,13 +30,10 @@ class _LoginPageState extends State<LoginPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (!value.contains('@')) {
-          return 'Email is invalid, must contain @';
+        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)){
+          return 'Invalid Email';
         }
-        if (!value.contains('.')) {
-          return 'Email is invalid, must contain .';
-        }
-
         return null;
       },
     );
