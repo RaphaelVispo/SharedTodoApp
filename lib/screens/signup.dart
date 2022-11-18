@@ -9,13 +9,14 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    TextEditingController firstNameController = TextEditingController();
+    TextEditingController lastNameController = TextEditingController();
 
     final email = TextFormField(
       controller: emailController,
@@ -29,17 +30,19 @@ class _SignupPageState extends State<SignupPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (!value.contains('@')) {
-          return 'Email is invalid, must contain @';
+        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)){
+          return 'Invalid Email';
         }
-        if (!value.contains('.')) {
-          return 'Email is invalid, must contain .';
-        }
+        // if (!value.contains('@')) {
+        //   return 'Emil is invalid, must contain @';
+        // }
+        // if (!value.contains('.')) {
+        //   return 'Email is invalid, must contain .';
+        // }
 
         return null;
       },
-
-
     );
 
     final password = TextFormField(
@@ -48,7 +51,6 @@ class _SignupPageState extends State<SignupPage> {
       decoration: const InputDecoration(
         hintText: 'Password',
       ),
-
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
@@ -61,7 +63,40 @@ class _SignupPageState extends State<SignupPage> {
       onChanged: (value) {
         _formKey.currentState!.validate();
       },
+    );
 
+    final firstName = TextFormField(
+      controller: firstNameController,
+      decoration: const InputDecoration(
+        hintText: 'First Name',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+
+        return null;
+      },
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
+    );
+
+    final lastName = TextFormField(
+      controller: lastNameController,
+      decoration: const InputDecoration(
+        hintText: 'Last Name',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+
+        return null;
+      },
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
     );
 
     final SignupButton = Padding(
@@ -69,13 +104,14 @@ class _SignupPageState extends State<SignupPage> {
       child: ElevatedButton(
         onPressed: () {
           //call the auth provider here
-          if (_formKey.currentState!.validate()){
-            context
-                .read<AuthProvider>()
-                .signUp(emailController.text, passwordController.text);
+          if (_formKey.currentState!.validate()) {
+            context.read<AuthProvider>().signUp(
+                emailController.text,
+                passwordController.text,
+                firstNameController.text,
+                lastNameController.text);
             Navigator.pop(context);
           }
-
         },
         child: const Text('Sign up', style: TextStyle(color: Colors.white)),
       ),
@@ -109,6 +145,8 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     email,
                     password,
+                    firstName,
+                    lastName,
                     SignupButton,
                     backButton
                   ],

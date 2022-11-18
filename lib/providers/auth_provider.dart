@@ -32,7 +32,7 @@ class AuthProvider with ChangeNotifier {
     authService.signOut();
   }
 
-  void signUp(String email, String password) {
-    authService.signUp(email, password);
+  void signUp(String email, String password, String firstName, String lastName) {
+    authService.signUp(email, password, firstName, lastName);
   }
 }
