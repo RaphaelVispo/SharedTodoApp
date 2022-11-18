@@ -1,5 +1,5 @@
 # User Authentication and Automated Tests
-## Exer 8
+## Exer 7
 
 ## Student Information 
 * Name : Raphael S. Vispo
