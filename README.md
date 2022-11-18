@@ -1,26 +1,39 @@
-# Simple Todo App using Firebase
+# User Authentication and Automated Tests
+## Exer 8
 
-The todo app connects to firebase cloud firestore and authentication. It uses a provider for state management
+## Student Information 
+* Name : Raphael S. Vispo
+* Strudent Number : 2021-10210
+* Section : D3L
 
-## Folder Structure
-```
-lib
-├───api
-│   └───firebase_auth_api.dart*
-│   └───firebase_todo_api.dart
-├───models
-│   └───todo_model.dart
-├───providers
-│   └───todo_provider.dart
-│   └───auth_provider.dart*
-├───screens
-│   ├───modal_todo.dart
-│   └───todo_page.dart
-│   └───login.dart*
-│   └───signup.dart*
-└───main.dart
-```
+## App Description 
+The app is a todo app with user Authentication. The authentication can also add users first name and last name in database. The app also supplies Test cases of 2 of each happy and unhappy paths.
 
-* Models - contains the data model used
-* Providers - contains the Todo provider that contains the data and method logic
-* Screens - contains the screen/widgets used
+## Screenshots
+
+Log in screen 
+
+![login Screen](loginSC.PNG)
+
+Sign up screen showing the validation errors
+
+![login Screen](signupSC.PNG)
+
+
+## Things that you did in the code
+
+For the validation, I used the the forms and the textFormfields. The email validation I used Regex. I also added an firstNAme and lastName when signing up the user, and this is stored in the database using the providers and firebase api.
+
+## Challenges faced
+
+* The validation of email  is difficult, i solved it by this [link](https://stackoverflow.com/questions/16800540/how-should-i-check-if-the-input-is-an-email-address-in-flutter)
+
+## Test Cases
+
+### Happy Paths
+
+* Pluggin in the user's Email, firstName and Lastname in the database
+* The validation of the different fields
+
+### Unhapppy Paths
+* Currently there is no found unhappy paths
