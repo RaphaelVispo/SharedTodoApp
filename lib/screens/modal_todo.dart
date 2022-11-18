@@ -1,9 +1,11 @@
 /*
-  Created by: Claizel Coubeili Cepe
-  Date: 27 October 2022
-  Description: Sample todo app with networking
+  Author: Raphael S. Vispo
+  Section: D3L
+  Date created: 18/ 11 /2022 
+  Exercise number: 7
+  Program Description:Todo app with the user authentication 
+  and test cases
 */
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';

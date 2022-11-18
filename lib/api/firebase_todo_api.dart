@@ -1,3 +1,13 @@
+/*
+  Author: Raphael S. Vispo
+  Section: D3L
+  Date created: 18/ 11 /2022 
+  Exercise number: 7
+  Program Description:Todo app with the user authentication 
+  and test cases
+*/
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
