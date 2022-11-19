@@ -30,10 +30,14 @@ For the validation, I used the the forms and the textFormfields. The email valid
 
 ## Test Cases
 
+The following are the test cases that I implemented for test.
+The following are for the  `signUpPage`
+
 ### Happy Paths
 
-* Pluggin in the user's Email, firstName and Lastname in the database
-* The validation of the different fields
+* All widgets will be shown in the field
+* if all are the fields have a valid input and the user signed up, the screen will pop and will go to the `TodoPage`
 
 ### Unhapppy Paths
-* Currently there is no found unhappy paths
+*  Error will be shown if the user has invalid email and password
+* Error will be shown if the user inputter nothing in the text field
