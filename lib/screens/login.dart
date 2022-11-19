@@ -86,9 +86,10 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final signUpButton = Padding(
-      key: const Key('signUpButton'),
+      
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        key: const Key('signUpButton'),
         onPressed: () async {
 
  

@@ -7,7 +7,6 @@
   and test cases
 */
 
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
@@ -29,6 +28,7 @@ class _SignupPageState extends State<SignupPage> {
     TextEditingController lastNameController = TextEditingController();
 
     final email = TextFormField(
+      key: const Key("emailkeysignup"),
       controller: emailController,
       decoration: const InputDecoration(
         hintText: "Email",
@@ -40,22 +40,18 @@ class _SignupPageState extends State<SignupPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value)){
+        if (!RegExp(
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(value)) {
           return 'Invalid Email';
         }
-        // if (!value.contains('@')) {
-        //   return 'Emil is invalid, must contain @';
-        // }
-        // if (!value.contains('.')) {
-        //   return 'Email is invalid, must contain .';
-        // }
 
         return null;
       },
     );
 
     final password = TextFormField(
+      key: const Key("passwordkeysignup"),
       controller: passwordController,
       obscureText: true,
       decoration: const InputDecoration(
@@ -76,6 +72,7 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     final firstName = TextFormField(
+      key: const Key("firstnamekeysignup"),
       controller: firstNameController,
       decoration: const InputDecoration(
         hintText: 'First Name',
@@ -93,6 +90,7 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     final lastName = TextFormField(
+      key: const Key("lastnamekeysignup"),
       controller: lastNameController,
       decoration: const InputDecoration(
         hintText: 'Last Name',
@@ -110,8 +108,10 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     final SignupButton = Padding(
+      key: const Key("signupbuttonnamekeysignup"),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        key: const Key("signup"),
         onPressed: () {
           //call the auth provider here
           if (_formKey.currentState!.validate()) {
@@ -128,8 +128,10 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     final backButton = Padding(
+      key: const Key("backbuttonnamekeysignup"),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        
         onPressed: () async {
           Navigator.pop(context);
         },
