@@ -13,13 +13,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:location/location.dart';
 
 class FirebaseAuthAPI {
-  // static final FirebaseAuth auth = FirebaseAuth.instance;
+  static final FirebaseAuth auth = FirebaseAuth.instance;
 
-  // static final FirebaseFirestore db = FirebaseFirestore.instance;
+  static final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final db = FakeFirebaseFirestore();
+  /*final db = FakeFirebaseFirestore();
 
   final auth = MockFirebaseAuth(
     mockUser: MockUser(
@@ -27,30 +28,35 @@ class FirebaseAuthAPI {
     uid: 'someuid',
     email: 'charlie@paddyspub.com',
     displayName: 'Charlie',
-  ));
+  ));*/
 
   Stream<User?> getUser() {
     return auth.authStateChanges();
   }
 
-  void signIn(String email, String password) async {
+  Future<String> signIn(String email, String password) async {
     UserCredential credential;
     try {
       final credential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+      return "userAuthenticated"; 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         //possible to return something more useful
         //than just print an error message to improve UI/UX
         print('No user found for that email.');
+        return "no-user-found"; 
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        return e.code;
       }
-    }
+    } throw{
+      print("null")
+    };
   }
 
   void signUp(
-      String email, String password, String firstName, String lastName) async {
+      String email, String password, String firstName, String lastName,  DateTime birthdayDate, LocationData location) async {
     UserCredential credential;
     try {
       credential = await auth.createUserWithEmailAndPassword(
@@ -58,7 +64,7 @@ class FirebaseAuthAPI {
         password: password,
       );
       if (credential.user != null) {
-        saveUserToFirestore(credential.user?.uid, email, firstName, lastName);
+        saveUserToFirestore(credential.user?.uid, email, firstName, lastName, birthdayDate, location);
       }
     } on FirebaseAuthException catch (e) {
       //possible to return something more useful
@@ -79,12 +85,16 @@ class FirebaseAuthAPI {
 
   //for adding extra more info aside from the auth
   void saveUserToFirestore(
-      String? uid, String email, String firstName, String lastName) async {
+      String? uid, String email, String firstName, String lastName, DateTime birthdayDate, LocationData location) async {
     try {
       await db
           .collection("users")
           .doc(uid)
-          .set({"email": email, "firstName": firstName, "lastName": lastName});
+          .set({"email": email, 
+          "firstName": firstName, 
+          "lastName": lastName, "birthday": 
+          birthdayDate, 
+          "location": {"longitude": location.longitude, "latitude": location.latitude}});
     } on FirebaseException catch (e) {
       print(e.message);
     }

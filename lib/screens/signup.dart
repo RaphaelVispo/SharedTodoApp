@@ -10,6 +10,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
+import 'package:date_field/date_field.dart';
+import 'package:location/location.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -26,6 +28,28 @@ class _SignupPageState extends State<SignupPage> {
     TextEditingController passwordController = TextEditingController();
     TextEditingController firstNameController = TextEditingController();
     TextEditingController lastNameController = TextEditingController();
+    DateTime ? birthdayDate; 
+    Location userLocation = new Location();
+
+
+    final birthday = DateTimeFormField(
+      decoration: const InputDecoration(
+        hintStyle: TextStyle(color: Colors.black45),
+        errorStyle: TextStyle(color: Colors.redAccent),
+        border: OutlineInputBorder(),
+        suffixIcon: Icon(Icons.event_note),
+        labelText: 'Birthday',
+        ),
+
+        mode: DateTimeFieldPickerMode.date,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+        onDateSelected: (DateTime value) {
+          print(value);
+          birthdayDate=value;
+        },
+      );
+
 
     final email = TextFormField(
       key: const Key("emailkeysignup"),
@@ -61,8 +85,8 @@ class _SignupPageState extends State<SignupPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (value.length <= 5) {
-          return 'The length should be more than 6';
+        if (value.length <= 8) {
+          return 'The length should be more than 8';
         }
         return null;
       },
@@ -112,14 +136,18 @@ class _SignupPageState extends State<SignupPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         key: const Key("signup"),
-        onPressed: () {
+        onPressed: ()async {
           //call the auth provider here
-          if (_formKey.currentState!.validate()) {
+          if (_formKey.currentState!.validate())  {
+
+            LocationData location = await userLocation.getLocation();
             context.read<AuthProvider>().signUp(
                 emailController.text,
                 passwordController.text,
                 firstNameController.text,
-                lastNameController.text);
+                lastNameController.text,
+                birthdayDate!,
+                location);
             Navigator.pop(context);
           }
         },
@@ -159,6 +187,7 @@ class _SignupPageState extends State<SignupPage> {
                     password,
                     firstName,
                     lastName,
+                    birthday,
                     SignupButton,
                     backButton
                   ],

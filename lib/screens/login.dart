@@ -58,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (value.length <= 5) {
-          return 'The length should be more than 6';
+        if (value.length <= 8) {
+          return 'The length should be more than 8';
         }
         return null;
       },
@@ -68,22 +68,55 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
+        Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Incorrect Password'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('Wrong Password'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     final loginButton = Padding(
       key: const Key('loginButton'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async{
           if (_formKey.currentState!.validate()){
-          context
+          String  message = await context
             .read<AuthProvider>()
             .signIn(emailController.text, passwordController.text);
 
+          print(message);
+          if (message=='wrong-password'){
+            _showMyDialog();
           }
 
+          }
         },
         child: const Text('Log In', style: TextStyle(color: Colors.white)),
       ),
     );
+
+
 
     final signUpButton = Padding(
       
@@ -91,8 +124,6 @@ class _LoginPageState extends State<LoginPage> {
       child: ElevatedButton(
         key: const Key('signUpButton'),
         onPressed: () async {
-
- 
 
           Navigator.of(context).push(
             MaterialPageRoute(

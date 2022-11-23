@@ -12,9 +12,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 class FirebaseTodoAPI {
-  // static final FirebaseFirestore db = FirebaseFirestore.instance;
+  static final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final db = FakeFirebaseFirestore();
+  //final db = FakeFirebaseFirestore();
 
 
   Future<String> addTodo(Map<String, dynamic> todo) async {
