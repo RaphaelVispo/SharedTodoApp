@@ -94,7 +94,12 @@ class FirebaseAuthAPI {
         "email": email,
         "firstName": firstName,
         "lastName": lastName,
-        "birthday": birthdayDate.day,
+        "birthday":{
+          "month": birthdayDate.month,
+          "day": birthdayDate.day,
+          "year": birthdayDate.year
+
+        } ,
         "location": {
           "longitude": location.longitude,
           "latitude": location.latitude

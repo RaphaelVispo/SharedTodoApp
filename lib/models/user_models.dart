@@ -12,11 +12,11 @@ class UserModel {
   String? email;
   String? firstName;
   String? lastName;
-  String? birthday;
+  Map? birthday;
   List? receivedFriendRequest;
   List? sentFriendRequest;
   List? friends;
-  List? location;
+  Map? location;
   List? todo;
   List? sharedTodo;
 
@@ -40,8 +40,8 @@ class UserModel {
         email: json['email'],
         firstName: json['firstName'],
         lastName: json['lastName'],
-//        birthday: json['birthday'],
-//        location: json['location'],
+        birthday: json['birthday'],
+        location: json['location'],
         receivedFriendRequest: json['receivedFriendRequest'],
         sentFriendRequest: json['sentFriendRequest'],
         friends: json['friends'],
