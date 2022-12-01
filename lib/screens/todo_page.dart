@@ -14,6 +14,7 @@ import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/addTodo.dart';
+import 'package:week7_networking_discussion/screens/editTodo.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
@@ -34,14 +35,18 @@ class _TodoPageState extends State<TodoPage> {
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
-        ListTile(
-            title: const Text('Logout'),
-            onTap: () {
-              context.read<AuthProvider>().signOut();
-              Navigator.pop(context);
-            }),
+        ListTile(title: const Text('Shared Todo'), onTap: () {}),
+        ListTile(title: const Text('Profile'), onTap: () {}),
         ListTile(
           title: const Text('Friends'),
           onTap: () {
@@ -80,10 +85,13 @@ class _TodoPageState extends State<TodoPage> {
             );
           },
         ),
+        ListTile(
+            title: const Text('Logout'),
+            onTap: () {
+              context.read<AuthProvider>().signOut();
+              Navigator.pop(context);
+            }),
       ])),
-      appBar: AppBar(
-        title: Text("Todo"),
-      ),
       body: StreamBuilder(
         stream: todosStream,
         builder: (context, snapshot) {
@@ -134,13 +142,11 @@ class _TodoPageState extends State<TodoPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) => TodoModal(
-                          //     type: 'Edit',
-                          //     todoIndex: index,
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditTodo()),
+                          );
                         },
                         icon: const Icon(Icons.create_outlined),
                       ),

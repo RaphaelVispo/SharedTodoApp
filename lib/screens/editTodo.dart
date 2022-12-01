@@ -6,14 +6,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:date_field/date_field.dart';
 
 
-class AddTodo extends StatefulWidget {
-  const AddTodo({super.key});
+class EditTodo extends StatefulWidget {
+  const EditTodo({super.key});
 
   @override
-  State<AddTodo> createState() => _AddTodoState();
+  State<EditTodo> createState() => _EditTodoState();
 }
 
-class _AddTodoState extends State<AddTodo> {
+class _EditTodoState extends State<EditTodo> {
   final _formKey = GlobalKey<FormState>();
   List<String> sharedTodo = ["0"];
   late int count;
@@ -77,7 +77,7 @@ class _AddTodoState extends State<AddTodo> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Create Todo",
+                      "Edit Todo",
                       style:
                           TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                     ),
@@ -154,7 +154,7 @@ class _AddTodoState extends State<AddTodo> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
-                child: Text("Add todo"),
+                child: Text("Edit todo"),
                 onPressed: () {},
               ),
             )
