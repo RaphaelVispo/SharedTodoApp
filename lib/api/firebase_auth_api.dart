@@ -7,7 +7,6 @@
   and test cases
 */
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -36,27 +35,27 @@ class FirebaseAuthAPI {
 
   Future<String> signIn(String email, String password) async {
     UserCredential credential;
+    String comment = "";
     try {
       final credential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      return "userAuthenticated"; 
+      comment = "userAuthenticated";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         //possible to return something more useful
         //than just print an error message to improve UI/UX
         print('No user found for that email.');
-        return "no-user-found"; 
+        comment = e.code;
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
-        return e.code;
+        comment = e.code;
       }
-    } throw{
-      print("null")
-    };
+    }
+    return comment;
   }
 
-  void signUp(
-      String email, String password, String firstName, String lastName,  DateTime birthdayDate, LocationData location) async {
+  void signUp(String email, String password, String firstName, String lastName,
+      DateTime birthdayDate, LocationData location) async {
     UserCredential credential;
     try {
       credential = await auth.createUserWithEmailAndPassword(
@@ -64,8 +63,11 @@ class FirebaseAuthAPI {
         password: password,
       );
       if (credential.user != null) {
-        saveUserToFirestore(credential.user?.uid, email, firstName, lastName, birthdayDate, location);
+        saveUserToFirestore(credential.user?.uid, email, firstName, lastName,
+            birthdayDate, location);
       }
+
+      print('The uiid = ${credential.user?.uid}');
     } on FirebaseAuthException catch (e) {
       //possible to return something more useful
       //than just print an error message to improve UI/UX
@@ -84,19 +86,29 @@ class FirebaseAuthAPI {
   }
 
   //for adding extra more info aside from the auth
-  void saveUserToFirestore(
-      String? uid, String email, String firstName, String lastName, DateTime birthdayDate, LocationData location) async {
+  void saveUserToFirestore(String? uid, String email, String firstName,
+      String lastName, DateTime birthdayDate, LocationData location) async {
     try {
-      await db
-          .collection("users")
-          .doc(uid)
-          .set({"email": email, 
-          "firstName": firstName, 
-          "lastName": lastName, "birthday": 
-          birthdayDate, 
-          "location": {"longitude": location.longitude, "latitude": location.latitude}});
+      await db.collection("users").doc(uid).set({
+        "id": uid,
+        "email": email,
+        "firstName": firstName,
+        "lastName": lastName,
+        "birthday": birthdayDate.day,
+        "location": {
+          "longitude": location.longitude,
+          "latitude": location.latitude
+        },
+        "receivedFriendRequest": ["0"],
+        "sentFriendRequest": ["0"],
+        "friends": ["0"],
+        "todo": ["0"],
+        "sharedTodo": ["0"]
+      });
+
     } on FirebaseException catch (e) {
       print(e.message);
     }
   }
+
 }

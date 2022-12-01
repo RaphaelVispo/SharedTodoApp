@@ -7,11 +7,12 @@
   and test cases
 */
 
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
+import 'package:provider/provider.dart';
+import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class AuthProvider with ChangeNotifier {
   late FirebaseAuthAPI authService;
@@ -21,12 +22,14 @@ class AuthProvider with ChangeNotifier {
     authService = FirebaseAuthAPI();
     authService.getUser().listen((User? newUser) {
       userObj = newUser;
-      print('AuthProvider - FirebaseAuth - onAuthStateChanged - $newUser');      
+      print('AuthProvider - FirebaseAuth - onAuthStateChanged - ${newUser?.uid}');
+
       notifyListeners();
     }, onError: (e) {
       // provide a more useful error
       print('AuthProvider - FirebaseAuth - onAuthStateChanged - $e');
     });
+  
   }
 
   User? get user => userObj;
@@ -43,7 +46,9 @@ class AuthProvider with ChangeNotifier {
     authService.signOut();
   }
 
-  void signUp(String email, String password, String firstName, String lastName, DateTime birthdayDate, LocationData location) {
-    authService.signUp(email, password, firstName, lastName, birthdayDate, location);
+  void signUp(String email, String password, String firstName, String lastName,
+      DateTime birthdayDate, LocationData location) {
+    authService.signUp(
+        email, password, firstName, lastName, birthdayDate, location);
   }
 }

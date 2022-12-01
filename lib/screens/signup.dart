@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:date_field/date_field.dart';
 import 'package:location/location.dart';
+import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -28,9 +29,8 @@ class _SignupPageState extends State<SignupPage> {
     TextEditingController passwordController = TextEditingController();
     TextEditingController firstNameController = TextEditingController();
     TextEditingController lastNameController = TextEditingController();
-    DateTime ? birthdayDate; 
+    DateTime? birthdayDate;
     Location userLocation = new Location();
-
 
     final birthday = DateTimeFormField(
       decoration: const InputDecoration(
@@ -39,17 +39,15 @@ class _SignupPageState extends State<SignupPage> {
         border: OutlineInputBorder(),
         suffixIcon: Icon(Icons.event_note),
         labelText: 'Birthday',
-        ),
-
-        mode: DateTimeFieldPickerMode.date,
-        autovalidateMode: AutovalidateMode.always,
-        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-        onDateSelected: (DateTime value) {
-          print(value);
-          birthdayDate=value;
-        },
-      );
-
+      ),
+      mode: DateTimeFieldPickerMode.date,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      onDateSelected: (DateTime value) {
+        print(value);
+        birthdayDate = value;
+      },
+    );
 
     final email = TextFormField(
       key: const Key("emailkeysignup"),
@@ -136,10 +134,9 @@ class _SignupPageState extends State<SignupPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         key: const Key("signup"),
-        onPressed: ()async {
+        onPressed: () async {
           //call the auth provider here
-          if (_formKey.currentState!.validate())  {
-
+          if (_formKey.currentState!.validate()) {
             LocationData location = await userLocation.getLocation();
             context.read<AuthProvider>().signUp(
                 emailController.text,
@@ -148,6 +145,7 @@ class _SignupPageState extends State<SignupPage> {
                 lastNameController.text,
                 birthdayDate!,
                 location);
+            //context.read<UserProvider>();
             Navigator.pop(context);
           }
         },
@@ -159,7 +157,6 @@ class _SignupPageState extends State<SignupPage> {
       key: const Key("backbuttonnamekeysignup"),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
-        
         onPressed: () async {
           Navigator.pop(context);
         },

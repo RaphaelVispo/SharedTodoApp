@@ -12,8 +12,12 @@ import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
+import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/screens/searchFriends.dart';
+import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
+import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -32,10 +36,47 @@ class _TodoPageState extends State<TodoPage> {
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
         ListTile(
-          title: const Text('Logout'),
+            title: const Text('Logout'),
+            onTap: () {
+              context.read<AuthProvider>().signOut();
+              Navigator.pop(context);
+            }),
+        ListTile(
+          title: const Text('Friends'),
           onTap: () {
-            context.read<AuthProvider>().signOut();
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchFriends()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Send Friend Request'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SendFriendRequest()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('View Sent Friend Request'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const SentFriendRequest()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Received Friends Request'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const FriendRequest()),
+            );
           },
         ),
       ])),
