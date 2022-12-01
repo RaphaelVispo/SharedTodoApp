@@ -13,6 +13,7 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/screens/FriendRequest.dart';
+import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
@@ -55,7 +56,8 @@ class _TodoPageState extends State<TodoPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SendFriendRequest()),
+              MaterialPageRoute(
+                  builder: (context) => const SendFriendRequest()),
             );
           },
         ),
@@ -74,8 +76,7 @@ class _TodoPageState extends State<TodoPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const FriendRequest()),
+              MaterialPageRoute(builder: (context) => const FriendRequest()),
             );
           },
         ),
@@ -167,11 +168,9 @@ class _TodoPageState extends State<TodoPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => TodoModal(
-              type: 'Add',
-            ),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTodo()),
           );
         },
         child: const Icon(Icons.add_outlined),

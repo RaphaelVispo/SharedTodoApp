@@ -38,7 +38,6 @@ class _SignupPageState extends State<SignupPage> {
         errorStyle: TextStyle(color: Colors.redAccent),
         border: OutlineInputBorder(),
         suffixIcon: Icon(Icons.event_note),
-        labelText: 'Birthday',
       ),
       mode: DateTimeFieldPickerMode.date,
       autovalidateMode: AutovalidateMode.always,

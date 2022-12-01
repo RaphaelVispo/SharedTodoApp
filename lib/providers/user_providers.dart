@@ -24,7 +24,7 @@ class UserProvider with ChangeNotifier {
   Stream<QuerySnapshot>? _sentFriendRequest;
 
   Future<DocumentSnapshot>? user;
-  UserModel ? userModel;
+  late UserModel userModel;
 
   UserProvider({required this.userId}) {
     userService = FirebaseUserAPI();
@@ -56,30 +56,30 @@ class UserProvider with ChangeNotifier {
 
   void getAllFriendRequest() {
     _allFriendRequest = userService
-        .getAllFriendRequest(userModel?.receivedFriendRequest as List);
+        .getAllFriendRequest(userModel.receivedFriendRequest as List);
   }
 
   void getAllFriend() {
-    _friendList = userService.getFriends(userModel?.friends as List);
+    _friendList = userService.getFriends(userModel.friends as List);
   }
 
   void getAllUsers() {
     _allUsers = userService.getAllUsers(
-        userModel?.friends as List,
-        userModel?.sentFriendRequest as List,
-        userModel?.receivedFriendRequest as List,
-        userModel?.id);
+        userModel.friends as List,
+        userModel.sentFriendRequest as List,
+        userModel.receivedFriendRequest as List,
+        userModel.id);
   }
 
   void getSentFriendRequest() {
     _sentFriendRequest =
-        userService.getSentFriendRequest(userModel?.sentFriendRequest);
+        userService.getSentFriendRequest(userModel.sentFriendRequest);
   }
 
-/*  void sendFriendRequest(String id) async {
+  void sendFriendRequest(String id) async {
     userModel.sentFriendRequest?.add(id);
 
-    String message = await firebaseService.addSentFriendRequest(
+    String message = await userService.addSentFriendRequest(
         this.userId, id, userModel.sentFriendRequest!);
     print(message);
     notifyListeners();
@@ -88,7 +88,7 @@ class UserProvider with ChangeNotifier {
   void cancelsentFriendRequest(String id) async {
     userModel.sentFriendRequest?.remove(id);
 
-    String message = await firebaseService.cancelSentFriendRequest(
+    String message = await userService.cancelSentFriendRequest(
         this.userId, id, userModel.sentFriendRequest!);
     print(message);
     notifyListeners();
@@ -98,7 +98,7 @@ class UserProvider with ChangeNotifier {
     userModel.receivedFriendRequest?.remove(id);
     userModel.friends?.add(id);
 
-    String message = await firebaseService.acceptFriendRequest(
+    String message = await userService.acceptFriendRequest(
         this.userId, id, userModel.receivedFriendRequest!, userModel.friends!);
     print(message);
     notifyListeners();
@@ -107,7 +107,7 @@ class UserProvider with ChangeNotifier {
   void cancelFriendRequest(String id) async {
     userModel.receivedFriendRequest?.remove(id);
 
-    String message = await firebaseService.cancelFriendRequest(
+    String message = await userService.cancelFriendRequest(
         this.userId, id, userModel.receivedFriendRequest!);
     print(message);
     notifyListeners();
@@ -117,8 +117,8 @@ class UserProvider with ChangeNotifier {
     userModel.friends?.remove(id);
 
     String message =
-        await firebaseService.unfriend(this.userId, id, userModel.friends!);
+        await userService.unfriend(this.userId, id, userModel.friends!);
     print(message);
     notifyListeners();
-  }*/
+  }
 }
