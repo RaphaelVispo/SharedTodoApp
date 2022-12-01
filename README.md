@@ -15,23 +15,23 @@ A todo app that uses CRUD methodologies, authentication and authorization
 Onced logged in:
 
 #### Todo Page
-![Todo app page](screenshots\todopage.PNG)
+![Todo app page](screenshots/todopage.PNG)
 
 #### Todo app drawer
 
 clicking the hamburget icon from the Todo page
 
-![Todo app drawer](screenshots\Drawer.PNG)
+![Todo app drawer](screenshots/Drawer.PNG)
 
 ####  Create Todo
 
 clicking the add icon fromthe todo page
 
-![Create todo](screenshots\createtodo.PNG)
+![Create todo](screenshots/createtodo.PNG)
 
 ####  UserProfile Todo
 
-![profile page](screenshots\profile.PNG)
+![profile page](screenshots/profile.PNG)
 
 ## Things that you did in the code
 
