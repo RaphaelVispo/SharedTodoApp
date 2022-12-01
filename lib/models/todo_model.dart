@@ -9,27 +9,36 @@
 
 import 'dart:convert';
 
-class Todo {
-  final int userId;
-  String? id;
-  String title;
-  bool completed;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Todo({
-    required this.userId,
-    this.id,
-    required this.title,
-    required this.completed,
-  });
+class Todo {
+  String? userId;
+  String? id;
+  String? title;
+  bool? completed;
+  String? context;
+  Timestamp? deadline;
+  List? sharedTo;
+
+  Todo(
+      {required this.userId,
+      this.id,
+      this.title,
+      this.completed,
+      this.context,
+      this.deadline,
+      this.sharedTo});
 
   // Factory constructor to instantiate object from json format
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-      completed: json['completed'],
-    );
+        userId: json['userId'],
+        id: json['id'],
+        title: json['title'],
+        context: json['context'],
+        completed: json['completed'],
+        deadline: json['deadline'],
+        sharedTo: json['sharedTo']);
   }
 
   static List<Todo> fromJsonArray(String jsonData) {

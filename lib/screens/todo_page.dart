@@ -29,6 +29,10 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
+  String convertNewLine(String content) {
+      print("Converting");
+      return content.replaceAll(r'\n', '\n');
+  }
   @override
   Widget build(BuildContext context) {
     // access the list of todos in the provider
@@ -128,7 +132,8 @@ class _TodoPageState extends State<TodoPage> {
                   child: const Icon(Icons.delete),
                 ),
                 child: ListTile(
-                  title: Text(todo.title),
+                  title: Text(todo.title!),
+                  subtitle: Text('${convertNewLine(todo.context!)}'),
                   leading: Checkbox(
                     value: todo.completed,
                     onChanged: (bool? value) {

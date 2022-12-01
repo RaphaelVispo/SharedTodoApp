@@ -69,7 +69,7 @@ class TodoModal extends StatelessWidget {
             {
               // Instantiate a todo objeect to be inserted, default userID will be 1, the id will be the next id in the list
               Todo temp = Todo(
-                  userId: 1,
+                  userId: "1",
                   completed: false,
                   title: _formFieldController.text);
 
