@@ -20,6 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
 import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
+import 'package:week7_networking_discussion/screens/sharedTodo.dart';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -30,9 +31,10 @@ class TodoPage extends StatefulWidget {
 
 class _TodoPageState extends State<TodoPage> {
   String convertNewLine(String content) {
-      print("Converting");
-      return content.replaceAll(r'\n', '\n');
+    print("Converting");
+    return content.replaceAll(r'\n', '\n');
   }
+
   @override
   Widget build(BuildContext context) {
     // access the list of todos in the provider
@@ -49,7 +51,14 @@ class _TodoPageState extends State<TodoPage> {
       ),
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
-        ListTile(title: const Text('Shared Todo'), onTap: () {}),
+        ListTile(
+            title: const Text('Shared Todo'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const sharedTodo()),
+              );
+            }),
         ListTile(title: const Text('Profile'), onTap: () {}),
         ListTile(
           title: const Text('Friends'),
