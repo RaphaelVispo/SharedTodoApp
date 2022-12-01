@@ -28,6 +28,7 @@ class UserProvider with ChangeNotifier {
 
   UserProvider({required this.userId}) {
     userService = FirebaseUserAPI();
+    user = userService.getuserInfo(this.userId!);
     getUserData();
   }
 

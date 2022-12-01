@@ -17,6 +17,7 @@ import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/editTodo.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/screens/profile.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
 import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
@@ -59,7 +60,12 @@ class _TodoPageState extends State<TodoPage> {
                 MaterialPageRoute(builder: (context) => const sharedTodo()),
               );
             }),
-        ListTile(title: const Text('Profile'), onTap: () {}),
+        ListTile(title: const Text('Profile'), onTap: () {
+                        Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Profile()),
+              );
+        }),
         ListTile(
           title: const Text('Friends'),
           onTap: () {
