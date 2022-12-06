@@ -177,67 +177,74 @@ class _TodoPageState extends State<TodoPage> {
             );
           }
 
-          return ListView.builder(
-            itemCount: snapshot.data?.docs.length,
-            itemBuilder: ((context, index) {
-              Todo todo = Todo.fromJson(
-                  snapshot.data?.docs[index].data() as Map<String, dynamic>);
-              return Dismissible(
-                key: Key(todo.id.toString()),
-                onDismissed: (direction) {
-                  context.read<TodoListProvider>().changeSelectedTodo(todo);
-                  context.read<TodoListProvider>().deleteTodo();
+          return Padding(
+            padding: EdgeInsets.all(15),
+            child: ListView.builder(
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: ((context, index) {
+                Todo todo = Todo.fromJson(
+                    snapshot.data?.docs[index].data() as Map<String, dynamic>);
+                return Dismissible(
+                  key: Key(todo.id.toString()),
+                  onDismissed: (direction) {
+                    context.read<TodoListProvider>().changeSelectedTodo(todo);
+                    context.read<TodoListProvider>().deleteTodo();
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${todo.title} dismissed')));
-                },
-                background: Container(
-                  color: Colors.red,
-                  child: const Icon(Icons.delete),
-                ),
-                child: ListTile(
-                  title: Text(todo.title!),
-                  subtitle: Text('${convertNewLine(todo.context!)}'),
-                  leading: Checkbox(
-                    value: todo.completed,
-                    onChanged: (bool? value) {
-                      context
-                          .read<TodoListProvider>()
-                          .toggleStatus(index, value!);
-                    },
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${todo.title} dismissed')));
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    child: const Icon(Icons.delete),
                   ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EditTodo()),
-                          );
-                        },
-                        icon: const Icon(Icons.create_outlined),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          context
-                              .read<TodoListProvider>()
-                              .changeSelectedTodo(todo);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => TodoModal(
-                              type: 'Delete',
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.delete_outlined),
-                      )
-                    ],
+                  child: ListTile(
+                    title: Text(todo.title!),
+                    subtitle: Column (children: [
+                       Text(convertNewLine(todo.title!)),
+                      Text(todo.context!),
+                      Text('${todo.deadline!}'),
+                    ],),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: todo.completed,
+                          onChanged: (bool? value) {
+                            context
+                                .read<TodoListProvider>()
+                                .toggleStatus(index, value!);
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const EditTodo()),
+                            );
+                          },
+                          icon: const Icon(Icons.create_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            context
+                                .read<TodoListProvider>()
+                                .changeSelectedTodo(todo);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => TodoModal(
+                                type: 'Delete',
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.delete_outlined),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           );
         },
       ),

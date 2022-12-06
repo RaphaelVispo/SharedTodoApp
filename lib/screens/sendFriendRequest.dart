@@ -35,7 +35,7 @@ class _SendFriendRequestState extends State<SendFriendRequest> {
               onPressed: () {
                 print('Sending a friend request to ${name} ${id}');
 
-               // context.read<UserProvider>().sendFriendRequest(id);
+                context.read<UserProvider>().sendFriendRequest(id);
               },
               child: Text("Send"))
         ],
@@ -46,7 +46,7 @@ class _SendFriendRequestState extends State<SendFriendRequest> {
   @override
   Widget build(BuildContext context) {
     // context.read<TodoListProvider>().getAllFriendRequest();
-    //context.read<UserProvider>().getAllUsers();
+    context.read<UserProvider>().getAllUsers();
     Stream<QuerySnapshot> todosStream =
         context.watch<UserProvider>().allUser;
     return Scaffold(

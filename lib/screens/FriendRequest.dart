@@ -39,7 +39,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   onPressed: () {
                     print("Accepting Friend Request ${id} ");
 
-                //    context.read<UserProvider>().acceptFriendRequest(id);
+                    context.read<UserProvider>().acceptFriendRequest(id);
                   },
                   child: Text("Accept")),
               ElevatedButton(
@@ -47,7 +47,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   onPressed: () {
                     print("Deleting Friend Request ${id} ");
 
-                 //   context.read<UserProvider>().cancelFriendRequest(id);
+                   context.read<UserProvider>().cancelFriendRequest(id);
                   },
                   child: Text("Decline"))
             ],
@@ -60,7 +60,7 @@ class _FriendRequestState extends State<FriendRequest> {
   @override
   Widget build(BuildContext context) {
     //auto update
-    //context.read<UserProvider>().getAllFriendRequest();
+    context.read<UserProvider>().getAllFriendRequest();
 
     Stream<QuerySnapshot> todosStream =
         context.watch<UserProvider>().friendRequests;

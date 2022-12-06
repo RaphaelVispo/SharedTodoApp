@@ -35,7 +35,7 @@ class _SentFriendRequestState extends State<SentFriendRequest> {
               onPressed: () {
                 print("to be moved ${id}");
 
-               // context.read<UserProvider>().cancelsentFriendRequest(id);
+                context.read<UserProvider>().cancelsentFriendRequest(id);
               },
               child: Text("Cancel"))
         ],
@@ -46,7 +46,7 @@ class _SentFriendRequestState extends State<SentFriendRequest> {
   @override
   Widget build(BuildContext context) {
     //auto update
-    //context.read<UserProvider>().getSentFriendRequest();
+    context.read<UserProvider>().getSentFriendRequest();
     Stream<QuerySnapshot> todosStream =
         context.watch<UserProvider>().sentFriendRequest;
 

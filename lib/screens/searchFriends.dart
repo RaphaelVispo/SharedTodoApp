@@ -35,7 +35,7 @@ class _SearchFriendsState extends State<SearchFriends> {
               child: Text("Unfriend"),
               onPressed: () {
                 print("Unfreind user: ${name} id: ${id}");
-               // context.read<UserProvider>().unfriend(id);
+                context.read<UserProvider>().unfriend(id);
               },
             ),
           ),
