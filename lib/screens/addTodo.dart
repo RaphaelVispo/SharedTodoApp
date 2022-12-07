@@ -23,7 +23,6 @@ class _AddTodoState extends State<AddTodo> {
   TextEditingController contextController = TextEditingController();
   late MultiValueDropDownController _cntMulti;
 
-
   DateTime? dealineDateTime;
   late int count;
 
@@ -42,7 +41,6 @@ class _AddTodoState extends State<AddTodo> {
 
   @override
   Widget build(BuildContext context) {
-
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
 
@@ -63,39 +61,20 @@ class _AddTodoState extends State<AddTodo> {
       },
     );
 
-
-
     UserModel userInfo = context.read<UserProvider>().userModel;
-    IconButton delete = IconButton(
-        onPressed: () {
-          setState(() {
-            if (count != 1) {
-              count -= 1;
-            }
-          });
-        },
-        icon: const Icon(Icons.delete));
 
-    IconButton add = IconButton(
-        onPressed: () {
-          setState(() {
-            count += 1;
-          });
-        },
-        icon: const Icon(Icons.add));
-
-
-    List<DropDownValueModel> getFriendList(List<QueryDocumentSnapshot<Object?>>? documents){
+    List<DropDownValueModel> getFriendList(
+        List<QueryDocumentSnapshot<Object?>>? documents) {
       List<DropDownValueModel> choiceFriends = [];
 
-      for (QueryDocumentSnapshot<Object?> friend in documents!){
-        UserModel user = UserModel.fromJson(
-                        friend.data() as Map<String, dynamic>);
-        choiceFriends.add(DropDownValueModel(name: '${user.firstName} ${user.lastName}',value: user.id));
+      for (QueryDocumentSnapshot<Object?> friend in documents!) {
+        UserModel user =
+            UserModel.fromJson(friend.data() as Map<String, dynamic>);
+        choiceFriends.add(DropDownValueModel(
+            name: '${user.firstName} ${user.lastName}', value: user.id));
       }
       print('choice: $choiceFriends');
       return choiceFriends;
-
     }
 
     return Scaffold(
@@ -171,54 +150,61 @@ class _AddTodoState extends State<AddTodo> {
                               shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
                                 return ListTile(
-                                    title: Row(children: [
-                                      Expanded(
+                                  title: Row(children: [
+                                    Expanded(
                                         child: StreamBuilder(
-                                        stream: freindsStream,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasError) {
-                                            return Center(
-                                              child: Text("Error encountered! ${snapshot.error}"),
-                                            );
-                                          } else if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return Center(
-                                              child: CircularProgressIndicator(),
-                                            );
-                                          } else if (!snapshot.hasData) {
-                                            return Center(
-                                              child: Text("No Todos Found"),
-                                            );
-                                          }
+                                            stream: freindsStream,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasError) {
+                                                return Center(
+                                                  child: Text(
+                                                      "Error encountered! ${snapshot.error}"),
+                                                );
+                                              } else if (snapshot
+                                                      .connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              } else if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: Text("No Todos Found"),
+                                                );
+                                              }
 
-                                          List<QueryDocumentSnapshot<Object?>>? friendDocument = snapshot.data?.docs;
+                                              List<
+                                                      QueryDocumentSnapshot<
+                                                          Object?>>?
+                                                  friendDocument =
+                                                  snapshot.data?.docs;
 
-                                    
-                                    return DropDownTextField.multiSelection(
-                                          controller: _cntMulti,
-                                          clearOption: false,
-                                          clearIconProperty: IconProperty(color: Colors.green),
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return "Required field";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          dropDownItemCount: 6,
-
-                                          dropDownList:getFriendList(friendDocument),
-                                          onChanged: (val) {
-                                            for(DropDownValueModel user in val){
-                                              sharedTodo.add(user.value);
-                                            }
-            
-                                },
-                              );
-                              })
-                            )
-                          ]),
-                          );
+                                              return DropDownTextField
+                                                  .multiSelection(
+                                                controller: _cntMulti,
+                                                clearOption: false,
+                                                clearIconProperty: IconProperty(
+                                                    color: Colors.green),
+                                                validator: (value) {
+                                                  if (value == null) {
+                                                    return "Required field";
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                dropDownItemCount: 6,
+                                                dropDownList: getFriendList(
+                                                    friendDocument),
+                                                onChanged: (val) {
+                                                  for (DropDownValueModel user
+                                                      in val) {
+                                                    sharedTodo.add(user.value);
+                                                  }
+                                                },
+                                              );
+                                            }))
+                                  ]),
+                                );
                               }),
                           Container(
                             height: 60,

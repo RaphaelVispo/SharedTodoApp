@@ -44,124 +44,147 @@ class _TodoPageState extends State<TodoPage> {
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     final Future<DocumentSnapshot> userInfo =
         context.watch<UserProvider>().info;
-
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+    UserModel? user;
+    final helloText = ListTile(
+      title: Text(
+        'Hello!',
+        style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
       ),
-      drawer: Drawer(
-          child: FutureBuilder(
-              future: userInfo,
-              builder: ((context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Error encountered! ${snapshot.error}"),
-                  );
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (!snapshot.hasData) {
-                  return Center(
-                    child: Text("No Todos Found"),
-                  );
-                }
+    );
+     greetUser(UserModel? user) {return ListTile(
+        title: Text(
+      '${user?.firstName}',
+      style: TextStyle(fontSize: 60, fontWeight: FontWeight.w100),
+    ));}
+    final shareTodobutton = ListTile(
+        title: const Text('Shared Todo'),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const sharedTodo()),
+          );
+        });
+    final profileButton = ListTile(
+        title: const Text('Profile'),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Profile()),
+          );
+        });
+    final searchFriendsButton = ListTile(
+      title: const Text('Friends'),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SearchFriends()),
+        );
+      },
+    );
+    final sendFriendRequestButton = ListTile(
+      title: const Text('Send Friend Request'),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SendFriendRequest()),
+        );
+      },
+    );
+    final sentFriendRequestButton = ListTile(
+      title: const Text('View Sent Friend Request'),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SentFriendRequest()),
+        );
+      },
+    );
+    final friendRequestButton = ListTile(
+      title: const Text('Received Friends Request'),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const FriendRequest()),
+        );
+      },
+    );
+    final logoutButton = ListTile(
+        title: const Text('Logout'),
+        onTap: () {
+          context.read<AuthProvider>().signOut();
+          Navigator.pop(context);
+        });
 
-                UserModel user = UserModel.fromJson(
-                    snapshot.data?.data() as Map<String, dynamic>);
+    addspacing(double h) {
+      return Container(
+        height: h,
+      );
+    }
 
-                return ListView(padding: EdgeInsets.only(top: 80), children: [
-                  ListTile(
-                    title: Text(
-                      'Hello!',
-                      style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    showTodos(Todo todo, int index) {
+      return Dismissible(
+        key: Key(todo.id.toString()),
+        onDismissed: (direction) {
+          context.read<TodoListProvider>().changeSelectedTodo(todo);
+          context.read<TodoListProvider>().deleteTodo();
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${todo.title} dismissed')));
+        },
+        background: Container(
+          color: Colors.red,
+          child: const Icon(Icons.delete),
+        ),
+        child: ListTile(
+          title: Text(todo.title!),
+          subtitle: Column(
+            children: [
+              Text(convertNewLine(todo.title!)),
+              Text(todo.context!),
+              Text('${todo.deadline!}'),
+              addspacing(50),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Checkbox(
+                value: todo.completed,
+                onChanged: (bool? value) {
+                  context.read<TodoListProvider>().toggleStatus(index, value!);
+                },
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EditTodo()),
+                  );
+                },
+                icon: const Icon(Icons.create_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  context.read<TodoListProvider>().changeSelectedTodo(todo);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => TodoModal(
+                      type: 'Delete',
                     ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      '${user.firstName!}',
-                      style:
-                          TextStyle(fontSize: 60, fontWeight: FontWeight.w100),
-                    ),
-                  ),
-                  Container(
-                    height: 300,
-                  ),
-                  ListTile(
-                      title: const Text('Shared Todo'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const sharedTodo()),
-                        );
-                      }),
-                  ListTile(
-                      title: const Text('Profile'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Profile()),
-                        );
-                      }),
-                  ListTile(
-                    title: const Text('Friends'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchFriends()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Send Friend Request'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SendFriendRequest()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('View Sent Friend Request'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SentFriendRequest()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Received Friends Request'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FriendRequest()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                      title: const Text('Logout'),
-                      onTap: () {
-                        context.read<AuthProvider>().signOut();
-                        Navigator.pop(context);
-                      }),
-                ]);
-              }))),
-      body: StreamBuilder(
-        stream: todosStream,
+                  );
+                },
+                icon: const Icon(Icons.delete_outlined),
+              ),
+              
+            ],
+          ),
+        ),
+      );
+    }
+
+    return FutureBuilder(
+        future: userInfo,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -177,87 +200,79 @@ class _TodoPageState extends State<TodoPage> {
             );
           }
 
-          return Padding(
-            padding: EdgeInsets.all(15),
-            child: ListView.builder(
-              itemCount: snapshot.data?.docs.length,
-              itemBuilder: ((context, index) {
-                Todo todo = Todo.fromJson(
-                    snapshot.data?.docs[index].data() as Map<String, dynamic>);
-                return Dismissible(
-                  key: Key(todo.id.toString()),
-                  onDismissed: (direction) {
-                    context.read<TodoListProvider>().changeSelectedTodo(todo);
-                    context.read<TodoListProvider>().deleteTodo();
+          user =
+              UserModel.fromJson(snapshot.data?.data() as Map<String, dynamic>);
+          return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                iconTheme: IconThemeData(
+                  color: Colors.black, //change your color here
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
+              drawer: Drawer(
+                child:
+                    ListView(padding: EdgeInsets.only(top: 80), children: [
+                      helloText,
+                      greetUser(user),
+                      addspacing(300),
+                      
+                      shareTodobutton,
+                      profileButton,
+                      searchFriendsButton,
+                      sendFriendRequestButton,
+                      sentFriendRequestButton,
+                      friendRequestButton,
+                      logoutButton
+                    ]),
+              ),
+              body: StreamBuilder(
+                stream: todosStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text("Error encountered! ${snapshot.error}"),
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (!snapshot.hasData) {
+                    return Center(
+                      child: Text("No Todos Found"),
+                    );
+                  }
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${todo.title} dismissed')));
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    child: const Icon(Icons.delete),
-                  ),
-                  child: ListTile(
-                    title: Text(todo.title!),
-                    subtitle: Column (children: [
-                       Text(convertNewLine(todo.title!)),
-                      Text(todo.context!),
-                      Text('${todo.deadline!}'),
-                    ],),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                          value: todo.completed,
-                          onChanged: (bool? value) {
-                            context
-                                .read<TodoListProvider>()
-                                .toggleStatus(index, value!);
-                          },
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const EditTodo()),
-                            );
-                          },
-                          icon: const Icon(Icons.create_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            context
-                                .read<TodoListProvider>()
-                                .changeSelectedTodo(todo);
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => TodoModal(
-                                type: 'Delete',
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.delete_outlined),
-                        )
-                      ],
+                  return Padding(
+                    padding: EdgeInsets.all(15),
+                    child: ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: ((context, index) {
+                        Todo todo = Todo.fromJson(snapshot.data?.docs[index]
+                            .data() as Map<String, dynamic>);
+                        print('Todo ${todo.userId} == ${user?.id}');
+
+                        if (todo.userId == user?.id) {
+                          return showTodos(todo, index);
+                        } else {
+                          return SizedBox();
+                        }
+                      }),
                     ),
-                  ),
-                );
-              }),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  AddTodo()),
-          );
-        },
-        child: const Icon(Icons.add_outlined),
-      ),
-    );
+                  );
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddTodo()),
+                  );
+                },
+                child: const Icon(Icons.add_outlined),
+              ));
+        });
   }
 }
