@@ -202,7 +202,7 @@ class _TodoPageState extends State<TodoPage> {
                     subtitle: Column (children: [
                        Text(convertNewLine(todo.title!)),
                       Text(todo.context!),
-                     // Text('${todo.deadline!}'),
+                      Text('${todo.deadline!}'),
                     ],),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,

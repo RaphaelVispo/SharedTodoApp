@@ -31,13 +31,14 @@ class Todo {
 
   // Factory constructor to instantiate object from json format
   factory Todo.fromJson(Map<String, dynamic> json) {
+    print(json);
     return Todo(
         userId: json['userId'],
         id: json['id'],
         title: json['title'],
         context: json['context'],
         completed: json['completed'],
-        deadline: json['deadline'],
+        deadline: DateTime.fromMicrosecondsSinceEpoch(json['deadline'].seconds * 1000000),
         sharedTo: json['sharedTo']);
   }
 
@@ -53,12 +54,8 @@ class Todo {
       'title': todo.title,
       'context': todo.context,
       'completed': todo.completed,
-      // 'deadline': todo.deadline,
+      'deadline': todo.deadline,
       'sharedTo': todo.sharedTo
-
-
     };
   }
-
-
 }
