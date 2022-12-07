@@ -27,6 +27,7 @@ class _sharedTodoState extends State<sharedTodo> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<TodoListProvider>().fetchTodos();
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
 
     return Scaffold(

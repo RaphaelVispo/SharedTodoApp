@@ -45,6 +45,7 @@ dependencies:
   firebase_auth_mocks: ^0.9.1
   date_field: ^3.0.2
   location: ^4.4.0
+  dropdown_textfield: ^1.0.7
 
 dev_dependencies:
   integration_test:

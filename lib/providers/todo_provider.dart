@@ -13,11 +13,14 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoListProvider with ChangeNotifier {
+  String userId;
   late FirebaseTodoAPI firebaseService;
   late Stream<QuerySnapshot> _todosStream;
   Todo? _selectedTodo;
 
-  TodoListProvider() {
+
+  //{required todosList}
+  TodoListProvider({required this.userId}) {
     firebaseService = FirebaseTodoAPI();
     fetchTodos();
   }

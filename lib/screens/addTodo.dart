@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,37 +21,50 @@ class _AddTodoState extends State<AddTodo> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController contextController = TextEditingController();
-  List<String> sharedTodo = ["0"];
+  late MultiValueDropDownController _cntMulti;
+
+
   DateTime? dealineDateTime;
   late int count;
-
-  void set dateTime(DateTime value) => this.dealineDateTime = value;
 
   @override
   initState() {
     count = 1;
-    // dealineDateTime = DateTime(20);
+    _cntMulti = MultiValueDropDownController();
     super.initState();
-    // Add listeners to this class
   }
 
-
+  @override
+  void dispose() {
+    _cntMulti.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-      final deadline = DateTimeFormField(
-    decoration: const InputDecoration(
-      hintStyle: TextStyle(color: Colors.black45),
-      errorStyle: TextStyle(color: Colors.redAccent),
-      suffixIcon: Icon(Icons.event_note),
-    ),
-    mode: DateTimeFieldPickerMode.dateAndTime,
-    autovalidateMode: AutovalidateMode.always,
-    validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-    onDateSelected: (DateTime value) {
-      dealineDateTime = value;
-    },
-  );
+
+    context.read<UserProvider>().getAllFriend();
+    Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
+
+    List<QueryDocumentSnapshot<Object?>>? documents = [];
+    List<String> sharedTodo = ["0"];
+
+    final deadline = DateTimeFormField(
+      decoration: const InputDecoration(
+        hintStyle: TextStyle(color: Colors.black45),
+        errorStyle: TextStyle(color: Colors.redAccent),
+        suffixIcon: Icon(Icons.event_note),
+      ),
+      mode: DateTimeFieldPickerMode.dateAndTime,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      onDateSelected: (DateTime value) {
+        dealineDateTime = value;
+      },
+    );
+
+
+
     UserModel userInfo = context.read<UserProvider>().userModel;
     IconButton delete = IconButton(
         onPressed: () {
@@ -69,6 +83,20 @@ class _AddTodoState extends State<AddTodo> {
           });
         },
         icon: const Icon(Icons.add));
+
+
+    List<DropDownValueModel> getFriendList(List<QueryDocumentSnapshot<Object?>>? documents){
+      List<DropDownValueModel> choiceFriends = [];
+
+      for (QueryDocumentSnapshot<Object?> friend in documents!){
+        UserModel user = UserModel.fromJson(
+                        friend.data() as Map<String, dynamic>);
+        choiceFriends.add(DropDownValueModel(name: '${user.firstName} ${user.lastName}',value: user.id));
+      }
+      print('choice: $choiceFriends');
+      return choiceFriends;
+
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -145,11 +173,52 @@ class _AddTodoState extends State<AddTodo> {
                                 return ListTile(
                                     title: Row(children: [
                                       Expanded(
-                                        child: TextFormField(),
-                                      )
-                                    ]),
-                                    leading: add,
-                                    trailing: delete);
+                                        child: StreamBuilder(
+                                        stream: freindsStream,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text("Error encountered! ${snapshot.error}"),
+                                            );
+                                          } else if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else if (!snapshot.hasData) {
+                                            return Center(
+                                              child: Text("No Todos Found"),
+                                            );
+                                          }
+
+                                          List<QueryDocumentSnapshot<Object?>>? friendDocument = snapshot.data?.docs;
+
+                                    
+                                    return DropDownTextField.multiSelection(
+                                          controller: _cntMulti,
+                                          clearOption: false,
+                                          clearIconProperty: IconProperty(color: Colors.green),
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return "Required field";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          dropDownItemCount: 6,
+
+                                          dropDownList:getFriendList(friendDocument),
+                                          onChanged: (val) {
+                                            for(DropDownValueModel user in val){
+                                              sharedTodo.add(user.value);
+                                            }
+            
+                                },
+                              );
+                              })
+                            )
+                          ]),
+                          );
                               }),
                           Container(
                             height: 60,
@@ -187,6 +256,7 @@ class _AddTodoState extends State<AddTodo> {
                         deadline: dealineDateTime);
 
                     context.read<TodoListProvider>().addTodo(temp);
+                    Navigator.pop(context);
                   }
                 },
               ),
