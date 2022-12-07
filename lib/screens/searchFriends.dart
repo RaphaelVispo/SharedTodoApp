@@ -102,7 +102,7 @@ class _SearchFriendsState extends State<SearchFriends> {
                       if (searchText.length > 0) {
                         documents = documents?.where((element) {
                           return element
-                              .get('userName')
+                              .get('firstName')
                               .toString()
                               .toLowerCase()
                               .contains(searchText.toLowerCase());
@@ -113,12 +113,12 @@ class _SearchFriendsState extends State<SearchFriends> {
                         itemCount: documents?.length,
                         itemBuilder: ((context, index) {
                           UserModel user = UserModel.fromJson(
-                              snapshot.data?.docs[index].data()
+                              documents?[index].data()
                                   as Map<String, dynamic>);
 
                           return _friendCard(
                               '${user.firstName!} ${user.lastName!}',
-                              user.email!,
+                               '${user.email}',
                               user.id);
                         }),
                       );
