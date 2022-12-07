@@ -55,6 +55,7 @@ class UserProvider with ChangeNotifier {
     // notifyListeners();
   }
 
+
   void getAllFriendRequest() {
     _allFriendRequest = userService
         .getAllFriendRequest(userModel.receivedFriendRequest as List);
@@ -122,4 +123,6 @@ class UserProvider with ChangeNotifier {
     print(message);
     notifyListeners();
   }
+
+
 }
