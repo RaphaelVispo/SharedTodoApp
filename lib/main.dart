@@ -6,6 +6,7 @@
   Program Description:Todo app with the user authentication 
   and test cases
 */
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
@@ -31,9 +32,12 @@ void main() async {
           update: (context, auth, previous) =>
               UserProvider(userId: auth.userObj?.uid??'0'),
         ),
+        ChangeNotifierProxyProvider<AuthProvider, TodoListProvider>(
+          create: (context) => TodoListProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
+          update: (context, auth, previous) =>
+              TodoListProvider(userId: auth.userObj?.uid??'0'),
+        ),
 
-
-        ChangeNotifierProvider(create: ((context) => TodoListProvider())),
       ],
       child: MyApp(),
     ),
