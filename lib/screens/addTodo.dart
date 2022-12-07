@@ -1,46 +1,57 @@
 import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 import 'package:date_field/date_field.dart';
-
+import 'package:week7_networking_discussion/models/todo_model.dart';
+import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/todo_provider.dart';
+import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class AddTodo extends StatefulWidget {
-  const AddTodo({super.key});
-
   @override
   State<AddTodo> createState() => _AddTodoState();
 }
 
 class _AddTodoState extends State<AddTodo> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contextController = TextEditingController();
   List<String> sharedTodo = ["0"];
+  DateTime? dealineDateTime;
   late int count;
+
+  void set dateTime(DateTime value) => this.dealineDateTime = value;
 
   @override
   initState() {
     count = 1;
+    // dealineDateTime = DateTime(20);
     super.initState();
     // Add listeners to this class
   }
-  
-  final deadline = DateTimeFormField(
-      decoration: const InputDecoration(
-        hintStyle: TextStyle(color: Colors.black45),
-        errorStyle: TextStyle(color: Colors.redAccent),
-        suffixIcon: Icon(Icons.event_note),
-      ),
-      mode: DateTimeFieldPickerMode.dateAndTime,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-      onDateSelected: (DateTime value) {
-  
-      },
-    );
+
+
 
   @override
   Widget build(BuildContext context) {
+      final deadline = DateTimeFormField(
+    decoration: const InputDecoration(
+      hintStyle: TextStyle(color: Colors.black45),
+      errorStyle: TextStyle(color: Colors.redAccent),
+      suffixIcon: Icon(Icons.event_note),
+    ),
+    mode: DateTimeFieldPickerMode.dateAndTime,
+    autovalidateMode: AutovalidateMode.always,
+    validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+    onDateSelected: (DateTime value) {
+      dealineDateTime = value;
+    },
+  );
+    UserModel userInfo = context.read<UserProvider>().userModel;
     IconButton delete = IconButton(
         onPressed: () {
           setState(() {
@@ -65,7 +76,7 @@ class _AddTodoState extends State<AddTodo> {
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
-          backgroundColor: Colors.transparent,  
+          backgroundColor: Colors.transparent,
           elevation: 0,
         ),
         body: Stack(
@@ -90,16 +101,25 @@ class _AddTodoState extends State<AddTodo> {
                       child: Column(
                         children: [
                           TextFormField(
+                            controller: titleController,
                             style: TextStyle(fontSize: 20),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(15),
                               hintText: "Title",
                             ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a title';
+                              }
+                            },
                           ),
                           Container(
                             height: 20,
                           ),
                           TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            controller: contextController,
+                            textInputAction: TextInputAction.newline,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(15),
                               hintText: "Content",
@@ -155,7 +175,20 @@ class _AddTodoState extends State<AddTodo> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 child: Text("Add todo"),
-                onPressed: () {},
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    print("Adding todo");
+                    Todo temp = Todo(
+                        userId: userInfo.id,
+                        completed: false,
+                        title: titleController.text,
+                        context: contextController.text,
+                        sharedTo: sharedTodo,
+                        deadline: dealineDateTime);
+
+                    context.read<TodoListProvider>().addTodo(temp);
+                  }
+                },
               ),
             )
           ],

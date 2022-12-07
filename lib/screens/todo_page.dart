@@ -202,10 +202,11 @@ class _TodoPageState extends State<TodoPage> {
                     subtitle: Column (children: [
                        Text(convertNewLine(todo.title!)),
                       Text(todo.context!),
-                      Text('${todo.deadline!}'),
+                     // Text('${todo.deadline!}'),
                     ],),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Checkbox(
                           value: todo.completed,
@@ -252,7 +253,7 @@ class _TodoPageState extends State<TodoPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddTodo()),
+            MaterialPageRoute(builder: (context) =>  AddTodo()),
           );
         },
         child: const Icon(Icons.add_outlined),

@@ -17,7 +17,7 @@ class Todo {
   String? title;
   bool? completed;
   String? context;
-  Timestamp? deadline;
+  DateTime? deadline;
   List? sharedTo;
 
   Todo(
@@ -48,9 +48,15 @@ class Todo {
 
   Map<String, dynamic> toJson(Todo todo) {
     return {
+      'id': '1',
       'userId': todo.userId,
       'title': todo.title,
+      'context': todo.context,
       'completed': todo.completed,
+      // 'deadline': todo.deadline,
+      'sharedTo': todo.sharedTo
+
+
     };
   }
 
