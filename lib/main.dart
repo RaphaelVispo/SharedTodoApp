@@ -29,7 +29,7 @@ void main() async {
         ChangeNotifierProxyProvider<AuthProvider, UserProvider>(
           create: (context) => UserProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
           update: (context, auth, previous) =>
-              UserProvider(userId: auth.userObj?.uid??'0'),
+              UserProvider(userId: auth.userObj?.uid ??'0'),
         ),
 
 
