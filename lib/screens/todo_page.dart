@@ -33,10 +33,7 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-  String convertNewLine(String content) {
-    print("Converting");
-    return content.replaceAll(r'\n', '\n');
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +136,7 @@ class _TodoPageState extends State<TodoPage> {
           title: Text(todo.title!),
           subtitle: Column(
             children: [
-              Text(convertNewLine(todo.title!)),
+              Text(todo.title!),
               Text(todo.context!),
               Text('${todo.deadline!}'),
               addspacing(50),
@@ -252,7 +249,7 @@ class _TodoPageState extends State<TodoPage> {
                       itemBuilder: ((context, index) {
                         Todo todo = Todo.fromJson(snapshot.data?.docs[index]
                             .data() as Map<String, dynamic>);
-                        print('Todo ${todo.userId} == ${user?.id}');
+                  
 
                         if (todo.userId == user?.id) {
                           return showTodos(todo, index);

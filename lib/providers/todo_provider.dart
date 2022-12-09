@@ -35,7 +35,7 @@ class TodoListProvider with ChangeNotifier {
 
   void fetchTodos() {
     _todosStream = firebaseService.getAllTodos();
-    notifyListeners();
+    //notifyListeners();
   }
 
   void addTodo(Todo item) async {

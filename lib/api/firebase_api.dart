@@ -101,7 +101,7 @@ class FirebaseUserAPI {
     try {
       //removed sent FR in the user
       await db
-          .collection("user")
+          .collection("users")
           .doc(userId)
           .update({'sentFriendRequest': updatedList});
 
@@ -113,7 +113,7 @@ class FirebaseUserAPI {
 
       //removing the send FR from the othser uesr
       await db
-          .collection("user")
+          .collection("users")
           .doc(id)
           .update({'receivedFriendRequest': userModel.receivedFriendRequest});
 
@@ -128,7 +128,7 @@ class FirebaseUserAPI {
     print("to Accepting: ${id}");
     try {
       //adding the user to the friends list
-      await db.collection("user").doc(userId).update({
+      await db.collection("users").doc(userId).update({
         'receivedFriendRequest': updatedFriendRequestList,
         'friends': updatedFriendList
       });
@@ -141,7 +141,7 @@ class FirebaseUserAPI {
       userModel.friends?.add(userId);
       userModel.receivedFriendRequest?.remove(userId);
 
-      await db.collection("user").doc(id).update({
+      await db.collection("users").doc(id).update({
         'friends': userModel.friends,
         'sentFriendRequest': userModel.receivedFriendRequest
       });
@@ -157,7 +157,7 @@ class FirebaseUserAPI {
     print("to canceling friend request: ${id}");
     try {
       //removing the FR from the user
-      await db.collection("user").doc(userId).update({
+      await db.collection("users").doc(userId).update({
         'receivedFriendRequest': updatedFriendRequestList,
       });
 
@@ -169,7 +169,7 @@ class FirebaseUserAPI {
 
       //removing th sent FR from the other user
       await db
-          .collection("user")
+          .collection("users")
           .doc(id)
           .update({'sentFriendRequest': userModel.receivedFriendRequest});
 
@@ -184,7 +184,7 @@ class FirebaseUserAPI {
     print("Unfriending: ${id}");
     try {
       //removing the friends list in the user id
-      await db.collection("user").doc(userId).update({
+      await db.collection("users").doc(userId).update({
         'friends': updatedFriendList,
       });
 
@@ -195,7 +195,7 @@ class FirebaseUserAPI {
       userModel.friends?.remove(userId);
 
       //removing the friends list in the other user
-      await db.collection("user").doc(id).update({
+      await db.collection("users").doc(id).update({
         'friends': userModel.friends,
       });
 

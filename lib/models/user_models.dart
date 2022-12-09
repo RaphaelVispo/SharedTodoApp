@@ -34,7 +34,7 @@ class UserModel {
       this.sharedTodo});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    print(json);
+    //print(json);
     UserModel user = UserModel(
         id: json['id'],
         email: json['email'],
@@ -47,7 +47,7 @@ class UserModel {
         friends: json['friends'],
         todo: json['todo'],
         sharedTodo: json['sharedTodo']);
-    print(user.friends);
+    //print(user.friends);
     return user;
   }
 }
