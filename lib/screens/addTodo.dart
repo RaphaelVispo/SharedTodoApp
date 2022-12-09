@@ -19,8 +19,8 @@ class AddTodo extends StatefulWidget {
 
 class _AddTodoState extends State<AddTodo> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contextController = TextEditingController();
+  late TextEditingController titleController;
+  late TextEditingController contextController;
   late MultiValueDropDownController _cntMulti;
 
   DateTime? dealineDateTime;
@@ -29,6 +29,8 @@ class _AddTodoState extends State<AddTodo> {
   @override
   initState() {
     count = 1;
+    titleController = TextEditingController();
+    contextController = TextEditingController();
     _cntMulti = MultiValueDropDownController();
     super.initState();
   }

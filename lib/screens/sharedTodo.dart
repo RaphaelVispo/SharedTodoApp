@@ -73,7 +73,7 @@ class _sharedTodoState extends State<sharedTodo> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const EditTodo()),
+                    MaterialPageRoute(builder: (context) => EditTodo(todo: todo,)),
                   );
                 },
                 icon: const Icon(Icons.create_outlined),

@@ -156,7 +156,7 @@ class _TodoPageState extends State<TodoPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const EditTodo()),
+                    MaterialPageRoute(builder: (context) => EditTodo(todo: todo,)),
                   );
                 },
                 icon: const Icon(Icons.create_outlined),
