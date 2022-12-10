@@ -164,6 +164,21 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
+    printEditHistory(List? listHistory) {
+      return Column(
+        children: [
+          Text("Edited by:"),
+            ListView(
+            shrinkWrap: true,
+            children: [
+              for (String change in listHistory!)
+                if (change != "0") Text(change)
+            ],
+          )
+        ],
+      );
+    }
+
     showTodos(Todo todo, int index) {
       return Dismissible(
         key: Key(todo.id.toString()),
@@ -186,6 +201,9 @@ class _TodoPageState extends State<TodoPage> {
               Text(todo.context!),
               Text('${todo.deadline!}'),
               printSharedTo(todo.sharedTo),
+              ((todo.editHistory?.length ??0) > 1)
+                ? printEditHistory(todo.editHistory)
+                : SizedBox(),
               addspacing(50),
             ],
           ),
