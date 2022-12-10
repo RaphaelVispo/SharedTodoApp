@@ -42,19 +42,21 @@ class UserProvider with ChangeNotifier {
     //getting the current user's data
 
     print("getting the user ...");
-    DocumentSnapshot uModel = await userService.getuserInfo(this.userId!);
 
-    userModel = UserModel.fromJson(uModel.data() as Map<String, dynamic>);
-    //print(userModel?.friends);
+    try {
+      DocumentSnapshot uModel = await userService.getuserInfo(this.userId!);
+      userModel = UserModel.fromJson(uModel.data() as Map<String, dynamic>);
 
-    getAllFriend();
-    getAllFriendRequest();
-    getAllUsers();
-    getSentFriendRequest();
+      getAllFriend();
+      getAllFriendRequest();
+      getAllUsers();
+      getSentFriendRequest();
 
-    // notifyListeners();
+    } catch (e) {
+      print("There is no user");
+    }
+
   }
-
 
   void getAllFriendRequest() {
     _allFriendRequest = userService
@@ -123,6 +125,4 @@ class UserProvider with ChangeNotifier {
     print(message);
     notifyListeners();
   }
-
-
 }
