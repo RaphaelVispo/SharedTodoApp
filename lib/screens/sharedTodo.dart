@@ -9,7 +9,6 @@ import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/editSharedTodo.dart';
 import 'package:week7_networking_discussion/screens/editTodo.dart';
-import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
 import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';

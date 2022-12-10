@@ -19,6 +19,7 @@ class Todo {
   String? context;
   DateTime? deadline;
   List? sharedTo;
+  Map<String, dynamic>? editHistory;
 
   Todo(
       {required this.userId,
@@ -27,19 +28,22 @@ class Todo {
       this.completed,
       this.context,
       this.deadline,
-      this.sharedTo});
+      this.sharedTo,
+      this.editHistory});
 
   // Factory constructor to instantiate object from json format
   factory Todo.fromJson(Map<String, dynamic> json) {
-   // print(json);
+    // print(json);
     return Todo(
         userId: json['userId'],
         id: json['id'],
         title: json['title'],
         context: json['context'],
         completed: json['completed'],
-        deadline: DateTime.fromMicrosecondsSinceEpoch(json['deadline'].seconds * 1000000),
-        sharedTo: json['sharedTo']);
+        deadline: DateTime.fromMicrosecondsSinceEpoch(
+            json['deadline'].seconds * 1000000),
+        sharedTo: json['sharedTo'],
+        editHistory :json['editHistory'] );
   }
 
   static List<Todo> fromJsonArray(String jsonData) {
@@ -55,7 +59,8 @@ class Todo {
       'context': todo.context,
       'completed': todo.completed,
       'deadline': todo.deadline,
-      'sharedTo': todo.sharedTo
+      'sharedTo': todo.sharedTo,
+      'editHistory':todo.editHistory
     };
   }
 }

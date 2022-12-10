@@ -17,7 +17,6 @@ import 'package:week7_networking_discussion/providers/user_providers.dart';
 import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/editTodo.dart';
-import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/screens/profile.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
@@ -33,8 +32,6 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-
-
   @override
   Widget build(BuildContext context) {
     // access the list of todos in the provider
@@ -48,11 +45,14 @@ class _TodoPageState extends State<TodoPage> {
         style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
       ),
     );
-     greetUser(UserModel? user) {return ListTile(
-        title: Text(
-      '${user?.firstName}',
-      style: TextStyle(fontSize: 60, fontWeight: FontWeight.w100),
-    ));}
+    greetUser(UserModel? user) {
+      return ListTile(
+          title: Text(
+        '${user?.firstName}',
+        style: TextStyle(fontSize: 60, fontWeight: FontWeight.w100),
+      ));
+    }
+
     final shareTodobutton = ListTile(
         title: const Text('Shared Todo'),
         onTap: () {
@@ -156,7 +156,10 @@ class _TodoPageState extends State<TodoPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => EditTodo(todo: todo,)),
+                    MaterialPageRoute(
+                        builder: (context) => EditTodo(
+                              todo: todo,
+                            )),
                   );
                 },
                 icon: const Icon(Icons.create_outlined),
@@ -166,14 +169,33 @@ class _TodoPageState extends State<TodoPage> {
                   context.read<TodoListProvider>().changeSelectedTodo(todo);
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) => TodoModal(
-                      type: 'Delete',
-                    ),
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Delete todo'),
+                        content: Text(
+                            'Are you sure you want to delete ${todo.title}'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('No'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              context.read<TodoListProvider>().deleteTodo();
+                              
+                            },
+                            child: Text('Yes'),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
                 icon: const Icon(Icons.delete_outlined),
               ),
-              
             ],
           ),
         ),
@@ -209,20 +231,18 @@ class _TodoPageState extends State<TodoPage> {
                 elevation: 0,
               ),
               drawer: Drawer(
-                child:
-                    ListView(padding: EdgeInsets.only(top: 80), children: [
-                      helloText,
-                      greetUser(user),
-                      addspacing(300),
-                      
-                      shareTodobutton,
-                      profileButton,
-                      searchFriendsButton,
-                      sendFriendRequestButton,
-                      sentFriendRequestButton,
-                      friendRequestButton,
-                      logoutButton
-                    ]),
+                child: ListView(padding: EdgeInsets.only(top: 80), children: [
+                  helloText,
+                  greetUser(user),
+                  addspacing(300),
+                  shareTodobutton,
+                  profileButton,
+                  searchFriendsButton,
+                  sendFriendRequestButton,
+                  sentFriendRequestButton,
+                  friendRequestButton,
+                  logoutButton
+                ]),
               ),
               body: StreamBuilder(
                 stream: todosStream,
@@ -249,7 +269,6 @@ class _TodoPageState extends State<TodoPage> {
                       itemBuilder: ((context, index) {
                         Todo todo = Todo.fromJson(snapshot.data?.docs[index]
                             .data() as Map<String, dynamic>);
-                  
 
                         if (todo.userId == user?.id) {
                           return showTodos(todo, index);
