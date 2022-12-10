@@ -19,7 +19,7 @@ class Todo {
   String? context;
   DateTime? deadline;
   List? sharedTo;
-  Map<String, dynamic>? editHistory;
+  List? editHistory;
 
   Todo(
       {required this.userId,

@@ -242,7 +242,7 @@ class _AddTodoState extends State<AddTodo> {
                         context: contextController.text,
                         sharedTo: sharedTodo,
                         deadline: dealineDateTime,
-                        editHistory: {});
+                        editHistory: ['0']);
 
                     context.read<TodoListProvider>().addTodo(temp);
                     Navigator.pop(context);

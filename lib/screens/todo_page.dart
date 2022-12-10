@@ -34,10 +34,10 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
-    // access the list of todos in the provider
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     final Future<DocumentSnapshot> userInfo =
         context.watch<UserProvider>().info;
+
     UserModel? user;
     final helloText = ListTile(
       title: Text(
@@ -118,6 +118,52 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
+    printSharedTo(List? sharedTo) {
+      context.read<UserProvider>().getAllFriend();
+      Stream<QuerySnapshot> friendsStream =
+          context.watch<UserProvider>().friends;
+      List? documents;
+      return StreamBuilder(
+        stream: friendsStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("Error encountered! ${snapshot.error}"),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (!snapshot.hasData) {
+            return Center(
+              child: Text("No Todos Found"),
+            );
+          }
+
+          documents = snapshot.data?.docs;
+          String sharedText = 'Shared to: ';
+
+          if (sharedTo!.length == 1) {
+            return Text('Todo is currently private');
+          }
+          for (QueryDocumentSnapshot friend in documents!) {
+            UserModel friendinfo =
+                UserModel.fromJson(friend.data() as Map<String, dynamic>);
+
+            if (sharedTo.contains(friendinfo.id)) {
+              sharedText = sharedText +
+                  friendinfo.firstName! +
+                  ' ' +
+                  friendinfo.lastName! +
+                  ', ';
+            }
+          }
+
+          return Text(sharedText);
+        },
+      );
+    }
+
     showTodos(Todo todo, int index) {
       return Dismissible(
         key: Key(todo.id.toString()),
@@ -139,6 +185,7 @@ class _TodoPageState extends State<TodoPage> {
               Text(todo.title!),
               Text(todo.context!),
               Text('${todo.deadline!}'),
+              printSharedTo(todo.sharedTo),
               addspacing(50),
             ],
           ),
@@ -185,7 +232,6 @@ class _TodoPageState extends State<TodoPage> {
                             onPressed: () {
                               Navigator.pop(context);
                               context.read<TodoListProvider>().deleteTodo();
-                              
                             },
                             child: Text('Yes'),
                           ),

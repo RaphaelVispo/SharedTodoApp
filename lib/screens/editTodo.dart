@@ -80,10 +80,13 @@ class _EditTodoState extends State<EditTodo> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userInfo = context.read<UserProvider>().userModel;
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
 
-
+  addEditHistory(){
+    
+  }
 
   deadline(DateTime? date) {
     return DateTimeFormField(
