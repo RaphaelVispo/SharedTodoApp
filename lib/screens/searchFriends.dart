@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
+import 'package:week7_networking_discussion/screens/viewFriendProfile.dart';
 
 class SearchFriends extends StatefulWidget {
   const SearchFriends({super.key});
@@ -24,13 +25,19 @@ class _SearchFriendsState extends State<SearchFriends> {
   String searchText = '';
   List<QueryDocumentSnapshot<Object?>>? documents = [];
 
-  Card _friendCard(String userName, String name, String id) {
+  Card _friendCard(String userName, String name, String id, UserModel friend) {
     return Card(
       child: Column(
         children: [
           ListTile(
             title: Text(userName),
             subtitle: Text(name),
+            onTap: () {
+              Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  viewFriendProfile(friend: friend,)),
+        );
+            },
             trailing: ElevatedButton(
               child: Text("Unfriend"),
               onPressed: () {
@@ -38,7 +45,7 @@ class _SearchFriendsState extends State<SearchFriends> {
                 context.read<UserProvider>().unfriend(id);
               },
             ),
-          ),
+          )
         ],
       ),
     );
@@ -113,13 +120,12 @@ class _SearchFriendsState extends State<SearchFriends> {
                         itemCount: documents?.length,
                         itemBuilder: ((context, index) {
                           UserModel user = UserModel.fromJson(
-                              documents?[index].data()
-                                  as Map<String, dynamic>);
+                              documents?[index].data() as Map<String, dynamic>);
 
                           return _friendCard(
                               '${user.firstName!} ${user.lastName!}',
-                               '${user.email}',
-                              user.id);
+                              '${user.email}',
+                              user.id, user);
                         }),
                       );
                     },
