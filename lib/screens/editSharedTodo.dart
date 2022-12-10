@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class editSharedTodo extends StatefulWidget {
@@ -23,6 +24,8 @@ class _editSharedTodoState extends State<editSharedTodo> {
   late TextEditingController contextController;
   final _formKey = GlobalKey<FormState>();
   List<String> sharedTodo = ["0"];
+  DateTime? dealineDateTime;
+
 
 
   late int count;
@@ -30,6 +33,7 @@ class _editSharedTodoState extends State<editSharedTodo> {
   List<DropDownValueModel> getFriendListInTodo(
       List<QueryDocumentSnapshot<Object?>>? documents) {
     List<DropDownValueModel> choiceFriends = [];
+
 
     for (QueryDocumentSnapshot<Object?> friend in documents!) {
       UserModel user =
@@ -169,7 +173,18 @@ class _editSharedTodoState extends State<editSharedTodo> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 child: Text("Edit todo"),
-                onPressed: () {},
+                onPressed: () {
+                  Todo temp = Todo(
+                      userId: widget.todo.userId,
+                      id: widget.todo.id,
+                      completed: false,
+                      title: titleController.text,
+                      context: contextController.text,
+                      sharedTo: widget.todo.sharedTo,
+                      deadline: dealineDateTime ?? widget.todo.deadline);
+                  context.read<TodoListProvider>().editTodo(temp);
+                  Navigator.pop(context);
+                },
               ),
             )
           ],
