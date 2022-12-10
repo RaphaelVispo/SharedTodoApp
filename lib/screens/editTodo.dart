@@ -24,11 +24,9 @@ class _EditTodoState extends State<EditTodo> {
   late TextEditingController titleController;
   late TextEditingController contextController;
   final _formKey = GlobalKey<FormState>();
-  List<String> sharedTodo = ["0"];
   late MultiValueDropDownController _cntMulti;
   late int count;
   DateTime? dealineDateTime;
-
 
   List<DropDownValueModel> getFriendListInTodo(
       List<QueryDocumentSnapshot<Object?>>? documents) {
@@ -44,7 +42,7 @@ class _EditTodoState extends State<EditTodo> {
             name: '${user.firstName} ${user.lastName}', value: user.id));
       }
     }
-    print('choice: $choiceFriends');
+    //print('choice: $choiceFriends');
     return choiceFriends;
   }
 
@@ -80,31 +78,43 @@ class _EditTodoState extends State<EditTodo> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel userInfo = context.read<UserProvider>().userModel;
+    Future<DocumentSnapshot<Object?>>? userInfo =
+        context.watch<UserProvider>().user;
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
+    List sharedTodo = ['0'];
+    addEditHistory() async {
+      DocumentSnapshot<Object?>? user = await userInfo;
+      UserModel users =
+          UserModel.fromJson(user?.data() as Map<String, dynamic>);
 
-  addEditHistory(){
-    
-  }
+      //print('edit histort ${widget.todo.editHistory}');
 
-  deadline(DateTime? date) {
-    return DateTimeFormField(
-      initialDate: date,
-      initialValue: date,
-      decoration: const InputDecoration(
-        hintStyle: TextStyle(color: Colors.black45),
-        errorStyle: TextStyle(color: Colors.redAccent),
-        suffixIcon: Icon(Icons.event_note),
-      ),
-      mode: DateTimeFieldPickerMode.dateAndTime,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-      onDateSelected: (DateTime value) {
-        dealineDateTime = value;
-      },
-    );
-  }
+      DateTime now = DateTime.now();
+      widget.todo.editHistory!
+          .add('${users.firstName} ${users.lastName} at $now');
+
+      return widget.todo.editHistory;
+    }
+
+    deadline(DateTime? date) {
+      return DateTimeFormField(
+        initialDate: date,
+        initialValue: date,
+        decoration: const InputDecoration(
+          hintStyle: TextStyle(color: Colors.black45),
+          errorStyle: TextStyle(color: Colors.redAccent),
+          suffixIcon: Icon(Icons.event_note),
+        ),
+        mode: DateTimeFieldPickerMode.dateAndTime,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (e) =>
+            (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+        onDateSelected: (DateTime value) {
+          dealineDateTime = value;
+        },
+      );
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -258,15 +268,19 @@ class _EditTodoState extends State<EditTodo> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 child: Text("Edit todo"),
-                onPressed: () {
+                onPressed: () async {
+                  widget.todo.editHistory = await addEditHistory();
+
                   Todo temp = Todo(
                       userId: widget.todo.userId,
                       id: widget.todo.id,
                       completed: false,
                       title: titleController.text,
                       context: contextController.text,
-                      sharedTo: sharedTodo,
-                      deadline: dealineDateTime ?? widget.todo.deadline);
+                      sharedTo:sharedTodo,
+                      deadline: dealineDateTime ?? widget.todo.deadline,
+                      editHistory: widget.todo.editHistory);
+
                   context.read<TodoListProvider>().editTodo(temp);
                   Navigator.pop(context);
                 },
