@@ -7,6 +7,7 @@ import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/addTodo.dart';
+import 'package:week7_networking_discussion/screens/editSharedTodo.dart';
 import 'package:week7_networking_discussion/screens/editTodo.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -73,7 +74,7 @@ class _sharedTodoState extends State<sharedTodo> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => EditTodo(todo: todo,)),
+                    MaterialPageRoute(builder: (context) => editSharedTodo(todo: todo,)),
                   );
                 },
                 icon: const Icon(Icons.create_outlined),

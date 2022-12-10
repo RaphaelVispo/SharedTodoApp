@@ -35,8 +35,8 @@ class _EditTodoState extends State<EditTodo> {
     for (QueryDocumentSnapshot<Object?> friend in documents!) {
       UserModel user =
           UserModel.fromJson(friend.data() as Map<String, dynamic>);
-      print('userid: ${user.id}');
-      print('shared to :${widget.todo.sharedTo}');
+      // print('userid: ${user.id}');
+      // print('shared to :${widget.todo.sharedTo}');
       if (widget.todo.sharedTo!.contains(user.id)) {
         choiceFriends.add(DropDownValueModel(
             name: '${user.firstName} ${user.lastName}', value: user.id));
