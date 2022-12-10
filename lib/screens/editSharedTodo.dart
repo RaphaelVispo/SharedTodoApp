@@ -30,41 +30,6 @@ class _editSharedTodoState extends State<editSharedTodo> {
 
   late int count;
 
-  List<DropDownValueModel> getFriendListInTodo(
-      List<QueryDocumentSnapshot<Object?>>? documents) {
-    List<DropDownValueModel> choiceFriends = [];
-
-
-    for (QueryDocumentSnapshot<Object?> friend in documents!) {
-      UserModel user =
-          UserModel.fromJson(friend.data() as Map<String, dynamic>);
-      // print('userid: ${user.id}');
-      // print('shared to :${widget.todo.sharedTo}');
-      if (widget.todo.sharedTo!.contains(user.id)) {
-        choiceFriends.add(DropDownValueModel(
-            name: '${user.firstName} ${user.lastName}', value: user.id));
-      }
-    }
-    print('choice: $choiceFriends');
-    return choiceFriends;
-  }
-
-  List<DropDownValueModel> getFriendAllList(
-      List<QueryDocumentSnapshot<Object?>>? documents) {
-    List<DropDownValueModel> choiceFriends = [];
-
-    for (QueryDocumentSnapshot<Object?> friend in documents!) {
-      UserModel user =
-          UserModel.fromJson(friend.data() as Map<String, dynamic>);
-
-      choiceFriends.add(DropDownValueModel(
-          name: '${user.firstName} ${user.lastName}', value: user.id));
-    }
-
-
-    // print('choice: $choiceFriends');
-    return choiceFriends;
-  }
 
   @override
   initState() {
@@ -92,11 +57,28 @@ class _editSharedTodoState extends State<editSharedTodo> {
       onDateSelected: (DateTime value) {},
     );
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    Future<DocumentSnapshot<Object?>>? userInfo =
+        context.watch<UserProvider>().user;
     context.read<UserProvider>().getAllFriend();
-    Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
+
+
+    addEditHistory() async {
+      DocumentSnapshot<Object?>? user = await userInfo;
+      UserModel users =
+          UserModel.fromJson(user?.data() as Map<String, dynamic>);
+
+      //print('edit histort ${widget.todo.editHistory}');
+
+      DateTime now = DateTime.now();
+      widget.todo.editHistory!
+          .add('${users.firstName} ${users.lastName} at $now');
+
+      return widget.todo.editHistory;
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -173,7 +155,10 @@ class _editSharedTodoState extends State<editSharedTodo> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 child: Text("Edit todo"),
-                onPressed: () {
+                onPressed: () async{
+                  widget.todo.editHistory = await addEditHistory();
+                  // print("shared todo ${widget.todo.sharedTo}");
+
                   Todo temp = Todo(
                       userId: widget.todo.userId,
                       id: widget.todo.id,
@@ -181,7 +166,9 @@ class _editSharedTodoState extends State<editSharedTodo> {
                       title: titleController.text,
                       context: contextController.text,
                       sharedTo: widget.todo.sharedTo,
-                      deadline: dealineDateTime ?? widget.todo.deadline);
+                      deadline: dealineDateTime ?? widget.todo.deadline,
+                      editHistory: widget.todo.editHistory);
+
                   context.read<TodoListProvider>().editTodo(temp);
                   Navigator.pop(context);
                 },

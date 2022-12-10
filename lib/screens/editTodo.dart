@@ -82,7 +82,8 @@ class _EditTodoState extends State<EditTodo> {
         context.watch<UserProvider>().user;
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
-    List sharedTodo = ['0'];
+    List? sharedTodo;
+
     addEditHistory() async {
       DocumentSnapshot<Object?>? user = await userInfo;
       UserModel users =
@@ -221,6 +222,8 @@ class _EditTodoState extends State<EditTodo> {
                                                   .multiSelection(
                                                 controller: _cntMulti,
                                                 clearOption: false,
+                                                // initialValue: getFriendListInTodo(
+                                                //           friendDocument),
                                                 clearIconProperty: IconProperty(
                                                     color: Colors.green),
                                                 validator: (value) {
@@ -234,9 +237,11 @@ class _EditTodoState extends State<EditTodo> {
                                                 dropDownList: getFriendAllList(
                                                     friendDocument),
                                                 onChanged: (val) {
+                                                  print(val);
+                                                  sharedTodo = ['0'];
                                                   for (DropDownValueModel user
                                                       in val) {
-                                                    sharedTodo.add(user.value);
+                                                    sharedTodo?.add(user.value);
                                                   }
                                                 },
                                               );
@@ -270,6 +275,7 @@ class _EditTodoState extends State<EditTodo> {
                 child: Text("Edit todo"),
                 onPressed: () async {
                   widget.todo.editHistory = await addEditHistory();
+                  print('shared todo $sharedTodo');
 
                   Todo temp = Todo(
                       userId: widget.todo.userId,
@@ -277,7 +283,7 @@ class _EditTodoState extends State<EditTodo> {
                       completed: false,
                       title: titleController.text,
                       context: contextController.text,
-                      sharedTo:sharedTodo,
+                      sharedTo: sharedTodo?? widget.todo.sharedTo,
                       deadline: dealineDateTime ?? widget.todo.deadline,
                       editHistory: widget.todo.editHistory);
 

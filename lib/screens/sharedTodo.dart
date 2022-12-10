@@ -41,6 +41,22 @@ class _sharedTodoState extends State<sharedTodo> {
       );
     }
 
+
+    printEditHistory(List? listHistory) {
+      return Column(
+        children: [
+          Text("Edited by:"),
+            ListView(
+            shrinkWrap: true,
+            children: [
+              for (String change in listHistory!)
+                if (change != "0") Text(change)
+            ],
+          )
+        ],
+      );
+    }
+
     showTodos(Todo todo, int index) {
       return Dismissible(
         key: Key(todo.id.toString()),
@@ -59,9 +75,12 @@ class _sharedTodoState extends State<sharedTodo> {
           title: Text(todo.title!),
           subtitle: Column(
             children: [
-              Text(convertNewLine(todo.title!)),
+              Text(todo.title!),
               Text(todo.context!),
               Text('${todo.deadline!}'),
+              ((todo.editHistory?.length ??0) > 1)
+                ? printEditHistory(todo.editHistory)
+                : SizedBox(),
               addspacing(50),
             ],
           ),
@@ -69,6 +88,10 @@ class _sharedTodoState extends State<sharedTodo> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Checkbox(
+                value: todo.completed,
+                onChanged: (bool? value) {},
+              ),
               IconButton(
                 onPressed: () {
                   Navigator.push(
