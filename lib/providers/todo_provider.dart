@@ -18,7 +18,6 @@ class TodoListProvider with ChangeNotifier {
   late Stream<QuerySnapshot> _todosStream;
   Todo? _selectedTodo;
 
-
   //{required todosList}
   TodoListProvider({required this.userId}) {
     firebaseService = FirebaseTodoAPI();
@@ -44,8 +43,14 @@ class TodoListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editTodo(int index, String newTitle) {
-    // _todoList[index].title = newTitle;
+  void editTodo(Todo item) async {
+    Map<String, dynamic> todo = item.toJson(item);
+    // todo.remove('id');
+    // todo.remove('userId');
+    todo['id'] = item.id;
+    print('editting todo :$todo');
+
+    String message = await firebaseService.editTodo(todo);
     print("Edit");
     notifyListeners();
   }
@@ -61,7 +66,4 @@ class TodoListProvider with ChangeNotifier {
     print("Toggle Status");
     notifyListeners();
   }
-
-
-  
 }

@@ -9,6 +9,7 @@ import 'package:date_field/date_field.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class EditTodo extends StatefulWidget {
@@ -25,8 +26,9 @@ class _EditTodoState extends State<EditTodo> {
   final _formKey = GlobalKey<FormState>();
   List<String> sharedTodo = ["0"];
   late MultiValueDropDownController _cntMulti;
-
   late int count;
+  DateTime? dealineDateTime;
+
 
   List<DropDownValueModel> getFriendListInTodo(
       List<QueryDocumentSnapshot<Object?>>? documents) {
@@ -76,25 +78,30 @@ class _EditTodoState extends State<EditTodo> {
     super.dispose();
   }
 
-  deadline (DateTime? date){
-  return DateTimeFormField(
-    initialDate: date,
-    initialValue: date,
-    decoration: const InputDecoration(
-      hintStyle: TextStyle(color: Colors.black45),
-      errorStyle: TextStyle(color: Colors.redAccent),
-      suffixIcon: Icon(Icons.event_note),
-    ),
-    mode: DateTimeFieldPickerMode.dateAndTime,
-    autovalidateMode: AutovalidateMode.always,
-    validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-    onDateSelected: (DateTime value) {},
-  );}
-
   @override
   Widget build(BuildContext context) {
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
+
+
+
+  deadline(DateTime? date) {
+    return DateTimeFormField(
+      initialDate: date,
+      initialValue: date,
+      decoration: const InputDecoration(
+        hintStyle: TextStyle(color: Colors.black45),
+        errorStyle: TextStyle(color: Colors.redAccent),
+        suffixIcon: Icon(Icons.event_note),
+      ),
+      mode: DateTimeFieldPickerMode.dateAndTime,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      onDateSelected: (DateTime value) {
+        dealineDateTime = value;
+      },
+    );
+  }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -133,6 +140,7 @@ class _EditTodoState extends State<EditTodo> {
                               contentPadding: EdgeInsets.all(15),
                               hintText: "Title",
                             ),
+                            onChanged: ((value) {}),
                           ),
                           Container(
                             height: 20,
@@ -247,7 +255,18 @@ class _EditTodoState extends State<EditTodo> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 child: Text("Edit todo"),
-                onPressed: () {},
+                onPressed: () {
+                  Todo temp = Todo(
+                      userId: widget.todo.userId,
+                      id: widget.todo.id,
+                      completed: false,
+                      title: titleController.text,
+                      context: contextController.text,
+                      sharedTo: sharedTodo,
+                      deadline: dealineDateTime ?? widget.todo.deadline);
+                  context.read<TodoListProvider>().editTodo(temp);
+                  Navigator.pop(context);
+                },
               ),
             )
           ],
