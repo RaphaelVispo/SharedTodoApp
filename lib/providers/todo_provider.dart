@@ -48,7 +48,6 @@ class TodoListProvider with ChangeNotifier {
     // todo.remove('id');
     // todo.remove('userId');
     todo['id'] = item.id;
-    print('editting todo :$todo');
 
     String message = await firebaseService.editTodo(todo);
     print("Edit");
@@ -61,8 +60,14 @@ class TodoListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleStatus(int index, bool status) {
-    // _todoList[index].completed = status;
+  void toggleStatus(Todo item, bool status)async {
+    Map<String, dynamic> todo = item.toJson(item);
+    // todo.remove('id');
+    // todo.remove('userId');
+    todo['id'] = item.id;
+    todo['completed'] = status;
+
+    String message = await firebaseService.editTodo(todo);
     print("Toggle Status");
     notifyListeners();
   }

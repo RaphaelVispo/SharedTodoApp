@@ -149,7 +149,7 @@ class _TodoPageState extends State<TodoPage> {
               Checkbox(
                 value: todo.completed,
                 onChanged: (bool? value) {
-                  context.read<TodoListProvider>().toggleStatus(index, value!);
+                  context.read<TodoListProvider>().toggleStatus(todo, value!);
                 },
               ),
               IconButton(
