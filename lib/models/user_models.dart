@@ -12,7 +12,7 @@ class UserModel {
   String? email;
   String? firstName;
   String? lastName;
-  Map? birthday;
+  DateTime? birthday;
   List? receivedFriendRequest;
   List? sentFriendRequest;
   List? friends;
@@ -40,7 +40,8 @@ class UserModel {
         email: json['email'],
         firstName: json['firstName'],
         lastName: json['lastName'],
-        birthday: json['birthday'],
+        birthday: DateTime.fromMicrosecondsSinceEpoch(
+            json['birthday'].seconds * 1000000),
         location: json['location'],
         receivedFriendRequest: json['receivedFriendRequest'],
         sentFriendRequest: json['sentFriendRequest'],

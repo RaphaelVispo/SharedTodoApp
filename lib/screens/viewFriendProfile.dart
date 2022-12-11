@@ -1,8 +1,11 @@
+import 'package:date_field/date_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:intl/intl.dart';
+
 
 class viewFriendProfile extends StatelessWidget {
   final UserModel friend;
@@ -10,6 +13,7 @@ class viewFriendProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -67,7 +71,7 @@ class viewFriendProfile extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Birthday: ${friend.birthday?['month']} ${friend.birthday?['day']}, ${friend.birthday?['year']} ',
+                            'Birthday: ${DateFormat().add_yMMMd().format(friend.birthday!)} ',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 20),

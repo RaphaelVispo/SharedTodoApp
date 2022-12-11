@@ -6,6 +6,7 @@ import 'package:week7_networking_discussion/models/user_models.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
+import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -97,7 +98,7 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Birthday: ${user.birthday?['month']} ${user.birthday?['day']}, ${user.birthday?['year']} ',
+                            'Birthday: ${DateFormat().add_yMMMd().format(user.birthday!)} ',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 20),
