@@ -3,16 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
-import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
-import 'package:week7_networking_discussion/screens/FriendRequest.dart';
-import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/editSharedTodo.dart';
-import 'package:week7_networking_discussion/screens/editTodo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:week7_networking_discussion/screens/searchFriends.dart';
-import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
-import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
+import 'package:intl/intl.dart';
 
 class sharedTodo extends StatefulWidget {
   const sharedTodo({super.key});
@@ -41,12 +35,11 @@ class _sharedTodoState extends State<sharedTodo> {
       );
     }
 
-
     printEditHistory(List? listHistory) {
       return Column(
         children: [
           Text("Edited by:"),
-            ListView(
+          ListView(
             shrinkWrap: true,
             children: [
               for (String change in listHistory!)
@@ -58,30 +51,22 @@ class _sharedTodoState extends State<sharedTodo> {
     }
 
     showTodos(Todo todo, int index) {
-      return Dismissible(
-        key: Key(todo.id.toString()),
-        onDismissed: (direction) {
-          context.read<TodoListProvider>().changeSelectedTodo(todo);
-          context.read<TodoListProvider>().deleteTodo();
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('${todo.title} dismissed')));
-        },
-        background: Container(
-          color: Colors.red,
-          child: const Icon(Icons.delete),
-        ),
+      return Card(
+          child: Padding(
+        padding: EdgeInsets.all(10),
         child: ListTile(
           title: Text(todo.title!),
           subtitle: Column(
             children: [
-              Text(todo.title!),
+              addspacing(10),
               Text(todo.context!),
-              Text('${todo.deadline!}'),
-              ((todo.editHistory?.length ??0) > 1)
-                ? printEditHistory(todo.editHistory)
-                : SizedBox(),
-              addspacing(50),
+              addspacing(10),
+              Text(
+                  'Deadline: ${DateFormat().add_yMMMMEEEEd().format(todo.deadline!)} at ${DateFormat().add_Hm().format(todo.deadline!)}'),
+              addspacing(10),
+              ((todo.editHistory?.length ?? 0) > 1)
+                  ? printEditHistory(todo.editHistory)
+                  : SizedBox(),
             ],
           ),
           trailing: Row(
@@ -96,7 +81,10 @@ class _sharedTodoState extends State<sharedTodo> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => editSharedTodo(todo: todo,)),
+                    MaterialPageRoute(
+                        builder: (context) => editSharedTodo(
+                              todo: todo,
+                            )),
                   );
                 },
                 icon: const Icon(Icons.create_outlined),
@@ -104,7 +92,7 @@ class _sharedTodoState extends State<sharedTodo> {
             ],
           ),
         ),
-      );
+      ));
     }
 
     return FutureBuilder(
@@ -129,11 +117,7 @@ class _sharedTodoState extends State<sharedTodo> {
           return Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              iconTheme: IconThemeData(
-                color: Colors.black, //change your color here
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
+              title: Text("Shared Todos"),
             ),
             body: StreamBuilder(
               stream: todosStream,
@@ -163,7 +147,12 @@ class _sharedTodoState extends State<sharedTodo> {
                       print('Todo ${todo.userId} == ${user?.id}');
 
                       if (todo.sharedTo!.contains(user?.id)) {
-                        return showTodos(todo, index);
+                        return Column(
+                          children: [
+                            showTodos(todo, index),
+                            addspacing(20),
+                          ],
+                        );
                       } else {
                         return SizedBox();
                       }

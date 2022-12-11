@@ -25,6 +25,8 @@ import 'package:week7_networking_discussion/screens/searchFriends.dart';
 import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sharedTodo.dart';
+import 'package:intl/intl.dart';
+
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -176,9 +178,10 @@ class _TodoPageState extends State<TodoPage> {
 
     printEditHistory(List? listHistory) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Edited by:"),
-            ListView(
+          ListView(
             shrinkWrap: true,
             children: [
               for (String change in listHistory!)
@@ -190,31 +193,26 @@ class _TodoPageState extends State<TodoPage> {
     }
 
     showTodos(Todo todo, int index) {
-      return Dismissible(
-        key: Key(todo.id.toString()),
-        onDismissed: (direction) {
-          context.read<TodoListProvider>().changeSelectedTodo(todo);
-          context.read<TodoListProvider>().deleteTodo();
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('${todo.title} dismissed')));
-        },
-        background: Container(
-          color: Colors.red,
-          child: const Icon(Icons.delete),
-        ),
-        child: ListTile(
+      return Card(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: ListTile(
           title: Text(todo.title!),
           subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(todo.title!),
-              Text(todo.context!),
-              Text('${todo.deadline!}'),
               printSharedTo(todo.sharedTo),
-              ((todo.editHistory?.length ??0) > 1)
-                ? printEditHistory(todo.editHistory)
-                : SizedBox(),
-              addspacing(50),
+              addspacing(10),
+              Text(todo.context!),
+
+              addspacing(10),
+              Text('Deadline: ${DateFormat().add_yMMMMEEEEd().format(todo.deadline!)} at ${DateFormat().add_Hm().format(todo.deadline!)}'),
+
+              addspacing(10),
+              
+              ((todo.editHistory?.length ?? 0) > 1)
+                  ? printEditHistory(todo.editHistory)
+                  : SizedBox(),
             ],
           ),
           trailing: Row(
@@ -272,7 +270,8 @@ class _TodoPageState extends State<TodoPage> {
               ),
             ],
           ),
-        ),
+        ),)
+        
       );
     }
 
@@ -298,11 +297,7 @@ class _TodoPageState extends State<TodoPage> {
           return Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBar(
-                iconTheme: IconThemeData(
-                  color: Colors.black, //change your color here
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
+                title: Text("Todos"),
               ),
               drawer: Drawer(
                 child: ListView(padding: EdgeInsets.only(top: 80), children: [
@@ -346,7 +341,12 @@ class _TodoPageState extends State<TodoPage> {
                             .data() as Map<String, dynamic>);
 
                         if (todo.userId == user?.id) {
-                          return showTodos(todo, index);
+                          return Column(
+                            children: [
+                              showTodos(todo, index),
+                              addspacing(20),
+                            ],
+                          );
                         } else {
                           return SizedBox();
                         }

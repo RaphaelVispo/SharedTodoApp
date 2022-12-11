@@ -13,6 +13,7 @@ import 'package:week7_networking_discussion/providers/notification_provider.dart
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 import 'package:week7_networking_discussion/screens/notification.dart';
+import 'package:intl/intl.dart';
 
 class EditTodo extends StatefulWidget {
   final Todo todo;
@@ -95,7 +96,7 @@ class _EditTodoState extends State<EditTodo> {
 
       DateTime now = DateTime.now();
       widget.todo.editHistory!
-          .add('${users?.firstName} ${users?.lastName} at $now');
+          .add('${users?.firstName} ${users?.lastName} at ${DateFormat().add_yMMMMEEEEd().format(now)} at ${DateFormat().add_Hm().format(now)}');
 
       return widget.todo.editHistory;
     }
