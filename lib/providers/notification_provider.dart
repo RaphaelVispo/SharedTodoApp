@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/api/firebase_api.dart';
+import 'package:week7_networking_discussion/api/firebase_notifications_api.dart';
+import 'package:week7_networking_discussion/models/user_models.dart';
+
+class NotificationProvider with ChangeNotifier {
+  String? userId;
+  //late FirebaseAuthAPI authService;
+  late FirebaseUserAPI userService;
+  late FirebaseNotificationAPI notificationService;
+
+  late UserModel userModel;
+
+  Stream<QuerySnapshot>? _NotificationStream;
+
+  Stream<QuerySnapshot> get notifs => _NotificationStream!;
+
+  NotificationProvider({required this.userId}) {
+    notificationService = FirebaseNotificationAPI();
+    userService = FirebaseUserAPI();
+    getUserData();
+  }
+
+  void getUserData() async {
+    //getting the current user's data
+
+    try {
+      print("getting the user ...");
+      DocumentSnapshot uModel = await userService.getuserInfo(this.userId!);
+      userModel = UserModel.fromJson(uModel.data() as Map<String, dynamic>);
+    } catch (e) {
+      print("There is no user");
+    }
+  }
+
+  void getNotifications() {
+    _NotificationStream = notificationService.getAllNotification();
+  }
+
+  void deadlineNotification() {}
+
+  void userAcceptedFriendRequest() {}
+
+  void sharedTodo() {}
+
+  void editiedtodo() {}
+}

@@ -8,10 +8,8 @@ Program Description: View, Add and delete friends
 */
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/api/firebase_api.dart';
-import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 
 class UserProvider with ChangeNotifier {

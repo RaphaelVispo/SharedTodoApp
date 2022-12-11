@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week7_networking_discussion/models/notofication_model.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
@@ -18,6 +19,7 @@ import 'package:week7_networking_discussion/screens/FriendRequest.dart';
 import 'package:week7_networking_discussion/screens/addTodo.dart';
 import 'package:week7_networking_discussion/screens/editTodo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/screens/notification.dart';
 import 'package:week7_networking_discussion/screens/profile.dart';
 import 'package:week7_networking_discussion/screens/searchFriends.dart';
 import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
@@ -53,6 +55,14 @@ class _TodoPageState extends State<TodoPage> {
       ));
     }
 
+    final Notificationbutton = ListTile(
+        title: const Text('Notifications'),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const notifications()),
+          );
+        });
     final shareTodobutton = ListTile(
         title: const Text('Shared Todo'),
         onTap: () {
@@ -299,6 +309,7 @@ class _TodoPageState extends State<TodoPage> {
                   helloText,
                   greetUser(user),
                   addspacing(300),
+                  Notificationbutton,
                   shareTodobutton,
                   profileButton,
                   searchFriendsButton,

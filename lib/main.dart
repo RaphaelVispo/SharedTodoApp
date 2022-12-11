@@ -9,6 +9,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
@@ -36,6 +37,11 @@ void main() async {
           create: (context) => TodoListProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
           update: (context, auth, previous) =>
               TodoListProvider(userId: auth.userObj?.uid??'0'),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
+          create: (context) => NotificationProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
+          update: (context, auth, previous) =>
+              NotificationProvider(userId: auth.userObj?.uid??'0'),
         ),
 
       ],
