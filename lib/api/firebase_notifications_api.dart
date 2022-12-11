@@ -17,12 +17,12 @@ class FirebaseNotificationAPI {
   //final db = FakeFirebaseFirestore();
 
 
-  Future<String> addNotification(Map<String, dynamic> todo) async {
+  Future<String> addNotification(Map<String, dynamic> notifications) async {
     try {
-      final docRef = await db.collection("todos").add(todo);
-      await db.collection("todos").doc(docRef.id).update({'id': docRef.id});
+      final docRef = await db.collection("notifications").add(notifications);
+      await db.collection("notifications").doc(docRef.id).update({'id': docRef.id});
 
-      return "Successfully added todo!";
+      return "Successfully added notifications!";
     } on FirebaseException catch (e) {
       return "Failed with error '${e.code}: ${e.message}";
     }

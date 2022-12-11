@@ -32,7 +32,8 @@ class _notificationsState extends State<notifications> {
   @override
   Widget build(BuildContext context) {
     context.read<NotificationProvider>().getNotifications();
-    Stream<QuerySnapshot> notificationStream = context.watch<NotificationProvider>().notifs;
+    Stream<QuerySnapshot> notificationStream =
+        context.watch<NotificationProvider>().notifs;
     final Future<DocumentSnapshot> userInfo =
         context.watch<UserProvider>().info;
     UserModel? user;
@@ -43,48 +44,15 @@ class _notificationsState extends State<notifications> {
       );
     }
 
-
-    printEditHistory(List? listHistory) {
-      return Column(
-        children: [
-          Text("Edited by:"),
-            ListView(
-            shrinkWrap: true,
-            children: [
-              for (String change in listHistory!)
-                if (change != "0") Text(change)
-            ],
-          )
-        ],
-      );
-    }
-
     showNotifications(Notifications notif, int index) {
-      return Dismissible(
-        key: Key(notif.id.toString()),
-        onDismissed: (direction) {
-          // context.read<TodoListProvider>().changeSelectedTodo(notif);
-          // context.read<TodoListProvider>().deleteTodo();
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('${notif.title} dismissed')));
-        },
-        background: Container(
-          color: Colors.red,
-          child: const Icon(Icons.delete),
-        ),
-        child: ListTile(
-          title: Text(notif.title!),
-          subtitle: Column(
-            children: [
-              Text(notif.title!),
-              Text(notif.context!),
-              Text('${notif.time!}'),
-
-              addspacing(50),
-            ],
-          ),
-
+      return ListTile(
+        title: Text(notif.title!),
+        subtitle: Column(
+          children: [
+            Text(notif.context!),
+            Text('${notif.time!}'),
+            addspacing(50),
+          ],
         ),
       );
     }
@@ -140,11 +108,12 @@ class _notificationsState extends State<notifications> {
                   child: ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: ((context, index) {
-                      Notifications notif = Notifications.fromJson(snapshot.data?.docs[index]
-                          .data() as Map<String, dynamic>);
+                      Notifications notif = Notifications.fromJson(
+                          snapshot.data?.docs[index].data()
+                              as Map<String, dynamic>);
                       // print('Todo ${todo.userId} == ${user?.id}');
 
-                      if (notif.toUserId == user?.id) {
+                      if (notif.toUserId!.contains(user?.id)) {
                         return showNotifications(notif, index);
                       } else {
                         return SizedBox();

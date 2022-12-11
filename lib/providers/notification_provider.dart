@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/api/firebase_api.dart';
 import 'package:week7_networking_discussion/api/firebase_notifications_api.dart';
+import 'package:week7_networking_discussion/models/notofication_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 
 class NotificationProvider with ChangeNotifier {
@@ -40,9 +41,17 @@ class NotificationProvider with ChangeNotifier {
 
   void deadlineNotification() {}
 
-  void userAcceptedFriendRequest() {}
 
-  void sharedTodo() {}
+  void editiedtodo(String? content, List sharedTodo) {
+    Notifications temp = Notifications(
+      id: "1",
+      fromUserId: userId,
+      toUserId: sharedTodo,
+      context: content,
+      title: "Edit a todo",
+      time: DateTime.now(),
+    );
 
-  void editiedtodo() {}
+    notificationService.addNotification(temp.toJson(temp));
+  }
 }

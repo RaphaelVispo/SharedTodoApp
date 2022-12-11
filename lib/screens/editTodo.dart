@@ -9,8 +9,10 @@ import 'package:date_field/date_field.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
+import 'package:week7_networking_discussion/screens/notification.dart';
 
 class EditTodo extends StatefulWidget {
   final Todo todo;
@@ -83,17 +85,17 @@ class _EditTodoState extends State<EditTodo> {
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
     List? sharedTodo;
+    UserModel? users;
 
     addEditHistory() async {
       DocumentSnapshot<Object?>? user = await userInfo;
-      UserModel users =
-          UserModel.fromJson(user?.data() as Map<String, dynamic>);
+      users = UserModel.fromJson(user?.data() as Map<String, dynamic>);
 
       //print('edit histort ${widget.todo.editHistory}');
 
       DateTime now = DateTime.now();
       widget.todo.editHistory!
-          .add('${users.firstName} ${users.lastName} at $now');
+          .add('${users?.firstName} ${users?.lastName} at $now');
 
       return widget.todo.editHistory;
     }
@@ -283,11 +285,15 @@ class _EditTodoState extends State<EditTodo> {
                       completed: false,
                       title: titleController.text,
                       context: contextController.text,
-                      sharedTo: sharedTodo?? widget.todo.sharedTo,
+                      sharedTo: sharedTodo ?? widget.todo.sharedTo,
                       deadline: dealineDateTime ?? widget.todo.deadline,
                       editHistory: widget.todo.editHistory);
 
                   context.read<TodoListProvider>().editTodo(temp);
+
+                  context.read<NotificationProvider>().editiedtodo(
+                    "${users?.firstName} ${users?.lastName} edited ${temp.title}",
+                    sharedTodo ?? widget.todo.sharedTo!);
                   Navigator.pop(context);
                 },
               ),

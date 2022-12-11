@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 
@@ -64,18 +65,18 @@ class _editSharedTodoState extends State<editSharedTodo> {
     Future<DocumentSnapshot<Object?>>? userInfo =
         context.watch<UserProvider>().user;
     context.read<UserProvider>().getAllFriend();
-
+    UserModel? users;
 
     addEditHistory() async {
       DocumentSnapshot<Object?>? user = await userInfo;
-      UserModel users =
+       users=
           UserModel.fromJson(user?.data() as Map<String, dynamic>);
 
       //print('edit histort ${widget.todo.editHistory}');
 
       DateTime now = DateTime.now();
       widget.todo.editHistory!
-          .add('${users.firstName} ${users.lastName} at $now');
+          .add('${users?.firstName} ${users?.lastName} at $now');
 
       return widget.todo.editHistory;
     }
@@ -170,6 +171,9 @@ class _editSharedTodoState extends State<editSharedTodo> {
                       editHistory: widget.todo.editHistory);
 
                   context.read<TodoListProvider>().editTodo(temp);
+                  context.read<NotificationProvider>().editiedtodo(
+                    "${users?.firstName} ${users?.lastName} edited ${temp.title}",
+                    [widget.todo.userId!]);
                   Navigator.pop(context);
                 },
               ),

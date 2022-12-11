@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Notifications {
   String? fromUserId;
-  String? toUserId;
+  List? toUserId;
   String? id;
   String? title;
   String? context;
