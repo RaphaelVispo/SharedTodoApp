@@ -39,7 +39,7 @@ class FirebaseUserAPI {
 
   //get friends  with the user id
   Stream<QuerySnapshot> getFriends(List friends) {
-    print(" friend list :${friends}");
+    // print(" friend list :${friends}");
     Stream<QuerySnapshot> friendList =
         db.collection("users").where('id', whereIn: friends).snapshots();
     return friendList;

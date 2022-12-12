@@ -39,7 +39,8 @@ class NotificationProvider with ChangeNotifier {
     _NotificationStream = notificationService.getAllNotification();
   }
 
-  void addDeadlineNotification(String? content, List sharedTodo){
+  void addDeadlineNotification(String? content, List sharedTodo) {
+    sharedTodo.add(userId);
     Notifications temp = Notifications(
       id: "1",
       fromUserId: userId,
@@ -52,10 +53,18 @@ class NotificationProvider with ChangeNotifier {
     notificationService.addNotification(temp.toJson(temp));
   }
 
-  void deadlineNotification() {
+  void editDeadlineNotification(Notifications notif, String context) {
+    Notifications temp = Notifications(
+      id: "1",
+      fromUserId: userId,
+      toUserId: notif.toUserId,
+      context: context,
+      title: "Deadline for the a todo",
+      time: DateTime.now(),
+    );
 
+    notificationService.editNotification(temp.toJson(temp));
   }
-
 
   void editiedtodo(String? content, List sharedTodo) {
     Notifications temp = Notifications(

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:date_field/date_field.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 
@@ -75,7 +76,7 @@ class _AddTodoState extends State<AddTodo> {
         choiceFriends.add(DropDownValueModel(
             name: '${user.firstName} ${user.lastName}', value: user.id));
       }
-      print('choice: $choiceFriends');
+      // print('choice: $choiceFriends');
       return choiceFriends;
     }
 
@@ -245,6 +246,13 @@ class _AddTodoState extends State<AddTodo> {
                         editHistory: ['0']);
 
                     context.read<TodoListProvider>().addTodo(temp);
+
+                
+                    final date2 = DateTime.now();
+                    final difference = dealineDateTime?.difference(date2).inDays;
+                    context
+                        .read<NotificationProvider>()
+                        .addDeadlineNotification("Only ${difference} days till the deadline", sharedTodo);
                     Navigator.pop(context);
                   }
                 },

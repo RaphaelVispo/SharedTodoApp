@@ -32,13 +32,16 @@ class FirebaseNotificationAPI {
     return db.collection("notifications").snapshots();
   }
 
-  Future<String> deleteNotification(String? id) async {
-    try {
-      await db.collection("todos").doc(id).delete();
 
-      return "Successfully deleted todo!";
+  Future<String> editNotification(Map<String, dynamic> notif) async {
+    try {
+      await db.collection("notifications").doc(notif["id"]).update(notif);
+
+      return "Successfully edit todo!";
     } on FirebaseException catch (e) {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
+
+
 }

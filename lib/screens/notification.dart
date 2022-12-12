@@ -24,10 +24,7 @@ class notifications extends StatefulWidget {
 }
 
 class _notificationsState extends State<notifications> {
-  String convertNewLine(String content) {
-    print("Converting");
-    return content.replaceAll(r'\n', '\n');
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +109,7 @@ class _notificationsState extends State<notifications> {
                           snapshot.data?.docs[index].data()
                               as Map<String, dynamic>);
                       // print('Todo ${todo.userId} == ${user?.id}');
-
+                      
                       if (notif.toUserId!.contains(user?.id)) {
                         return showNotifications(notif, index);
                       } else {

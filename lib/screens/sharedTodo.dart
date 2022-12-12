@@ -144,7 +144,6 @@ class _sharedTodoState extends State<sharedTodo> {
                     itemBuilder: ((context, index) {
                       Todo todo = Todo.fromJson(snapshot.data?.docs[index]
                           .data() as Map<String, dynamic>);
-                      print('Todo ${todo.userId} == ${user?.id}');
 
                       if (todo.sharedTo!.contains(user?.id)) {
                         return Column(

@@ -240,7 +240,7 @@ class _EditTodoState extends State<EditTodo> {
                                                 dropDownList: getFriendAllList(
                                                     friendDocument),
                                                 onChanged: (val) {
-                                                  print(val);
+                                                  //print(val);
                                                   sharedTodo = ['0'];
                                                   for (DropDownValueModel user
                                                       in val) {
