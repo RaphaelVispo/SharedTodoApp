@@ -174,6 +174,9 @@ class _editSharedTodoState extends State<editSharedTodo> {
                   context.read<NotificationProvider>().editiedtodo(
                     "${users?.firstName} ${users?.lastName} edited ${temp.title}",
                     [widget.todo.userId!]);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${temp.title} edited')));
                   Navigator.pop(context);
                 },
               ),

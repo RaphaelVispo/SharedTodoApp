@@ -95,8 +95,8 @@ class _EditTodoState extends State<EditTodo> {
       //print('edit histort ${widget.todo.editHistory}');
 
       DateTime now = DateTime.now();
-      widget.todo.editHistory!
-          .add('${users?.firstName} ${users?.lastName} at ${DateFormat().add_yMMMMEEEEd().format(now)} at ${DateFormat().add_Hm().format(now)}');
+      widget.todo.editHistory!.add(
+          '${users?.firstName} ${users?.lastName} at ${DateFormat().add_yMMMMEEEEd().format(now)} at ${DateFormat().add_Hm().format(now)}');
 
       return widget.todo.editHistory;
     }
@@ -293,8 +293,11 @@ class _EditTodoState extends State<EditTodo> {
                   context.read<TodoListProvider>().editTodo(temp);
 
                   context.read<NotificationProvider>().editiedtodo(
-                    "${users?.firstName} ${users?.lastName} edited ${temp.title}",
-                    sharedTodo ?? widget.todo.sharedTo!);
+                      "${users?.firstName} ${users?.lastName} edited ${temp.title}",
+                      sharedTodo ?? widget.todo.sharedTo!);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${temp.title} edited')));
                   Navigator.pop(context);
                 },
               ),

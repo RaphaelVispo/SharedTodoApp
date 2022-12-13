@@ -258,14 +258,10 @@ class _AddTodoState extends State<AddTodo> {
 
                     context.read<TodoListProvider>().addTodo(temp);
 
-                    // final date2 = DateTime.now();
-                    // final difference =
-                    //     dealineDateTime?.difference(date2).inDays;
-                    // context
-                    //     .read<NotificationProvider>()
-                    //     .addDeadlineNotification(
-                    //         "Only ${difference} days till the deadline",
-                    //         sharedTodo);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text('${temp.title} Added')));
                     Navigator.pop(context);
                   }
                 },

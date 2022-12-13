@@ -267,6 +267,10 @@ class _TodoPageState extends State<TodoPage> {
                             onPressed: () {
                               Navigator.pop(context);
                               context.read<TodoListProvider>().deleteTodo();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text('${todo.title} deleted')));
                             },
                             child: Text('Yes'),
                           ),
