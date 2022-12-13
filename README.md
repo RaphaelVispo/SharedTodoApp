@@ -21,7 +21,7 @@ Onced logged in:
 
 clicking the hamburget icon from the Todo page
 
-![Todo app drawer](screenshots/drawer.PNG)
+![Todo app drawer](screenshots/Drawer.PNG)
 
 #### Friends
 
