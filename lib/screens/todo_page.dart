@@ -36,6 +36,14 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
+  int? count;
+  @override
+  void initState() {
+    // TODO: implement initState
+    count = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
@@ -155,6 +163,7 @@ class _TodoPageState extends State<TodoPage> {
           documents = snapshot.data?.docs;
           String sharedText = 'Shared to: ';
 
+          sharedTo?.remove(user?.id);
           if (sharedTo!.length == 1) {
             return Text('Todo is currently private');
           }
@@ -192,17 +201,21 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
-    showTodos(Todo todo, int index)  {
-      final date2 = DateTime.now();
-      final differences = todo.deadline?.difference(date2).inDays;
+    showTodos(Todo todo, int index, int ?len) {
+      if (count! < len!) {
+        count = count! + 1;
+      
+        final date2 = DateTime.now();
+        final differences = todo.deadline?.difference(date2).inDays;
 
-      if (!(differences!.isNegative) && differences < 3 && differences != 0) {
-        context.read<NotificationProvider>().addDeadlineNotification(
-            "Only ${differences} till the deadline is for ${todo.title}",
-            todo.sharedTo!);
-      } else if (differences == 0) {
-        context.read<NotificationProvider>().addDeadlineNotification(
-            "Deadline is Up for ${todo.title}", todo.sharedTo!);
+        if (!(differences!.isNegative) && differences < 3 && differences != 0) {
+          context.read<NotificationProvider>().addDeadlineNotification(
+              "Only ${differences} till the deadline is for ${todo.title}",
+              todo.sharedTo!);
+        } else if (differences == 0) {
+          context.read<NotificationProvider>().addDeadlineNotification(
+              "Deadline is Up for ${todo.title}", todo.sharedTo!);
+        }
       }
 
       return Card(
@@ -355,7 +368,7 @@ class _TodoPageState extends State<TodoPage> {
                         if (todo.userId == user?.id) {
                           return Column(
                             children: [
-                              showTodos(todo, index),
+                              showTodos(todo, index, snapshot.data?.docs.length),
                               addspacing(20),
                             ],
                           );
