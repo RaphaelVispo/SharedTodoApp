@@ -15,23 +15,23 @@ A todo app that uses CRUD methodologies, authentication and authorization. The A
 Onced logged in:
 
 #### Todo Page
-![Todo app page](screenshots\todopage.PNG)
+![Todo app page](screenshots/todopage.PNG)
 
 #### Todo app drawer
 
 clicking the hamburget icon from the Todo page
 
-![Todo app drawer](screenshots/Drawer.PNG)
+![Todo app drawer](screenshots/drawer.PNG)
 
 #### Friends
 
 clicking the add icon from the todo page
 
-![friends todo](screenshots\friends.PNG)
+![friends todo](screenshots/friends.PNG)
 
 ####  UserProfile Todo
 This shows the notifications of the user
-![notification page](screenshots\notification.PNG)
+![notification page](screenshots/notification.PNG)
 
 ## Things that you did in the code
 * Friends feature: Add add Unfriend friends with friend request.
