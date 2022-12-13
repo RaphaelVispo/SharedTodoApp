@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/notofication_model.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
@@ -26,7 +27,6 @@ import 'package:week7_networking_discussion/screens/sendFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sentFriendRequest.dart';
 import 'package:week7_networking_discussion/screens/sharedTodo.dart';
 import 'package:intl/intl.dart';
-
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -193,10 +193,21 @@ class _TodoPageState extends State<TodoPage> {
     }
 
     showTodos(Todo todo, int index) {
+      final date2 = DateTime.now();
+      final differences = todo.deadline?.difference(date2).inDays;
+      if (!(differences!.isNegative) && differences < 3 && differences != 0) {
+        context.read<NotificationProvider>().addDeadlineNotification(
+            "Only ${differences} till the deadline is for ${todo.title}",
+            todo.sharedTo!);
+      } else if (differences == 0) {
+        context.read<NotificationProvider>().addDeadlineNotification(
+            "Deadline is Up for ${todo.title}", todo.sharedTo!);
+      }
+
       return Card(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: ListTile(
+          child: Padding(
+        padding: EdgeInsets.all(10),
+        child: ListTile(
           title: Text(todo.title!),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,12 +215,10 @@ class _TodoPageState extends State<TodoPage> {
               printSharedTo(todo.sharedTo),
               addspacing(10),
               Text(todo.context!),
-
               addspacing(10),
-              Text('Deadline: ${DateFormat().add_yMMMMEEEEd().format(todo.deadline!)} at ${DateFormat().add_Hm().format(todo.deadline!)}'),
-
+              Text(
+                  'Deadline: ${DateFormat().add_yMMMMEEEEd().format(todo.deadline!)} at ${DateFormat().add_Hm().format(todo.deadline!)}'),
               addspacing(10),
-              
               ((todo.editHistory?.length ?? 0) > 1)
                   ? printEditHistory(todo.editHistory)
                   : SizedBox(),
@@ -270,9 +279,8 @@ class _TodoPageState extends State<TodoPage> {
               ),
             ],
           ),
-        ),)
-        
-      );
+        ),
+      ));
     }
 
     return FutureBuilder(

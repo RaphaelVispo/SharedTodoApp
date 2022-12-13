@@ -24,8 +24,6 @@ class notifications extends StatefulWidget {
 }
 
 class _notificationsState extends State<notifications> {
-
-
   @override
   Widget build(BuildContext context) {
     context.read<NotificationProvider>().getNotifications();
@@ -42,16 +40,28 @@ class _notificationsState extends State<notifications> {
     }
 
     showNotifications(Notifications notif, int index) {
-      return ListTile(
-        title: Text(notif.title!),
-        subtitle: Column(
-          children: [
-            Text(notif.context!),
-            Text('${notif.time!}'),
-            addspacing(50),
-          ],
-        ),
-      );
+      return Card(
+          child: Dismissible(
+              key: Key(index.toString()),
+              onDismissed: (direction) {
+                context.read<NotificationProvider>().deleteNotif(notif.id!);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${notif.title} dismissed')));
+              },
+              background: Container(
+                color: Colors.red,
+                child: const Icon(Icons.delete),
+              ),
+              child: ListTile(
+                title: Text(notif.title!),
+                subtitle: Column(
+                  children: [
+                    Text(notif.context!),
+                    Text('${notif.time!}'),
+                  ],
+                ),
+              )));
     }
 
     return FutureBuilder(
@@ -76,11 +86,7 @@ class _notificationsState extends State<notifications> {
           return Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              iconTheme: IconThemeData(
-                color: Colors.black, //change your color here
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
+              title: Text("Nontifications"),
             ),
             body: StreamBuilder(
               stream: notificationStream,
@@ -109,9 +115,12 @@ class _notificationsState extends State<notifications> {
                           snapshot.data?.docs[index].data()
                               as Map<String, dynamic>);
                       // print('Todo ${todo.userId} == ${user?.id}');
-                      
+
                       if (notif.toUserId!.contains(user?.id)) {
-                        return showNotifications(notif, index);
+                        return Column(children: [
+                          showNotifications(notif, index),
+                          addspacing(10),
+                        ]);
                       } else {
                         return SizedBox();
                       }

@@ -53,6 +53,10 @@ class NotificationProvider with ChangeNotifier {
     notificationService.addNotification(temp.toJson(temp));
   }
 
+  void deleteNotif(String id) {
+    notificationService.deleteNotifications(id);
+  }
+
   void editDeadlineNotification(Notifications notif, String context) {
     Notifications temp = Notifications(
       id: "1",

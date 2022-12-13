@@ -43,5 +43,15 @@ class FirebaseNotificationAPI {
     }
   }
 
+    Future<String> deleteNotifications(String? id) async {
+    try {
+      await db.collection("notifications").doc(id).delete();
+
+      return "Successfully deleted todo!";
+    } on FirebaseException catch (e) {
+      return "Failed with error '${e.code}: ${e.message}";
+    }
+  }
+
 
 }
