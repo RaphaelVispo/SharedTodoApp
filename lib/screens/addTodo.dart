@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -51,6 +51,7 @@ class _AddTodoState extends State<AddTodo> {
     List<String> sharedTodo = ["0"];
 
     final deadline = DateTimeFormField(
+      key: const Key("deadlineForm"),
       decoration: const InputDecoration(
         hintStyle: TextStyle(color: Colors.black45),
         errorStyle: TextStyle(color: Colors.redAccent),
@@ -118,6 +119,7 @@ class _AddTodoState extends State<AddTodo> {
                       child: Column(
                         children: [
                           TextFormField(
+                            key: const Key('TitleField'),
                             controller: titleController,
                             style: TextStyle(fontSize: 20),
                             decoration: InputDecoration(
@@ -134,6 +136,8 @@ class _AddTodoState extends State<AddTodo> {
                             height: 20,
                           ),
                           TextFormField(
+                            key: const Key('contextField'),
+
                               keyboardType: TextInputType.multiline,
                               controller: contextController,
                               textInputAction: TextInputAction.newline,
@@ -145,7 +149,7 @@ class _AddTodoState extends State<AddTodo> {
                               minLines: 1,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter a title';
+                                  return 'Please enter a content';
                                 }
                               }),
                           Container(
@@ -243,6 +247,7 @@ class _AddTodoState extends State<AddTodo> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
+                key: const Key("AddTodoButton"),
                 child: Text("Add todo"),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {

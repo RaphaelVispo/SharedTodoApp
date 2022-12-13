@@ -8,15 +8,17 @@ Program Description: View, Add and delete friends
 */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
 
 class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
-
+  // final db = FakeFirebaseFirestore();
   FirebaseUserAPI();
 
   //get with the user info
   Future<DocumentSnapshot> getuserInfo(String id) async {
+
     return db.collection("users").doc(id).get();
   }
 

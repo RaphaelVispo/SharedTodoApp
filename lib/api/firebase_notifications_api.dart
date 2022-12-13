@@ -12,8 +12,8 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 class FirebaseNotificationAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
-
-  //final db = FakeFirebaseFirestore();
+  FirebaseNotificationAPI();
+  // final db = FakeFirebaseFirestore();
 
   Future<String> addNotification(Map<String, dynamic> notifications) async {
     try {
@@ -52,5 +52,4 @@ class FirebaseNotificationAPI {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
-
 }

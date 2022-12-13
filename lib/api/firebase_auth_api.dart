@@ -18,16 +18,17 @@ class FirebaseAuthAPI {
   static final FirebaseAuth auth = FirebaseAuth.instance;
 
   static final FirebaseFirestore db = FirebaseFirestore.instance;
+  FirebaseAuthAPI();
 
-  /*final db = FakeFirebaseFirestore();
+  // final db = FakeFirebaseFirestore();
 
-  final auth = MockFirebaseAuth(
-    mockUser: MockUser(
-    isAnonymous: false,
-    uid: 'someuid',
-    email: 'charlie@paddyspub.com',
-    displayName: 'Charlie',
-  ));*/
+  // final auth = MockFirebaseAuth(
+  //     mockUser: MockUser(
+  //   isAnonymous: false,
+  //   uid: '38nlhqZo2VUCuveb8hiwSWKi4K92',
+  //   email: 'user@gmail.com',
+  //   displayName: 'User User',
+  // ));
 
   Stream<User?> getUser() {
     return auth.authStateChanges();
@@ -86,8 +87,14 @@ class FirebaseAuthAPI {
   }
 
   //for adding extra more info aside from the auth
-  void saveUserToFirestore(String? uid, String email, String firstName,
-      String lastName, DateTime birthdayDate, LocationData location, String bio) async {
+  void saveUserToFirestore(
+      String? uid,
+      String email,
+      String firstName,
+      String lastName,
+      DateTime birthdayDate,
+      LocationData location,
+      String bio) async {
     try {
       await db.collection("users").doc(uid).set({
         "id": uid,
@@ -106,10 +113,8 @@ class FirebaseAuthAPI {
         "sharedTodo": ["0"],
         "bio": bio,
       });
-
     } on FirebaseException catch (e) {
       print(e.message);
     }
   }
-
 }
