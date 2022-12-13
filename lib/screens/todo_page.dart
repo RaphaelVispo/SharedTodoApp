@@ -192,9 +192,10 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
-    showTodos(Todo todo, int index) {
+    showTodos(Todo todo, int index)  {
       final date2 = DateTime.now();
       final differences = todo.deadline?.difference(date2).inDays;
+
       if (!(differences!.isNegative) && differences < 3 && differences != 0) {
         context.read<NotificationProvider>().addDeadlineNotification(
             "Only ${differences} till the deadline is for ${todo.title}",
@@ -269,8 +270,7 @@ class _TodoPageState extends State<TodoPage> {
                               context.read<TodoListProvider>().deleteTodo();
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      content:
-                                          Text('${todo.title} deleted')));
+                                      content: Text('${todo.title} deleted')));
                             },
                             child: Text('Yes'),
                           ),

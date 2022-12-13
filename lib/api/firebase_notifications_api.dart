@@ -7,7 +7,6 @@
   and test cases
 */
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
@@ -16,11 +15,13 @@ class FirebaseNotificationAPI {
 
   //final db = FakeFirebaseFirestore();
 
-
   Future<String> addNotification(Map<String, dynamic> notifications) async {
     try {
       final docRef = await db.collection("notifications").add(notifications);
-      await db.collection("notifications").doc(docRef.id).update({'id': docRef.id});
+      await db
+          .collection("notifications")
+          .doc(docRef.id)
+          .update({'id': docRef.id});
 
       return "Successfully added notifications!";
     } on FirebaseException catch (e) {
@@ -32,7 +33,6 @@ class FirebaseNotificationAPI {
     return db.collection("notifications").snapshots();
   }
 
-
   Future<String> editNotification(Map<String, dynamic> notif) async {
     try {
       await db.collection("notifications").doc(notif["id"]).update(notif);
@@ -43,7 +43,7 @@ class FirebaseNotificationAPI {
     }
   }
 
-    Future<String> deleteNotifications(String? id) async {
+  Future<String> deleteNotifications(String? id) async {
     try {
       await db.collection("notifications").doc(id).delete();
 
@@ -52,6 +52,5 @@ class FirebaseNotificationAPI {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
-
 
 }

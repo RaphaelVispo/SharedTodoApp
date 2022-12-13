@@ -42,7 +42,7 @@ class _notificationsState extends State<notifications> {
     showNotifications(Notifications notif, int index) {
       return Card(
           child: Dismissible(
-              key: Key(index.toString()),
+              key: UniqueKey(),
               onDismissed: (direction) {
                 context.read<NotificationProvider>().deleteNotif(notif.id!);
 

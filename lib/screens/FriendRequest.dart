@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/notification_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 
 class FriendRequest extends StatefulWidget {
@@ -40,6 +41,8 @@ class _FriendRequestState extends State<FriendRequest> {
                     print("Accepting Friend Request ${id} ");
 
                     context.read<UserProvider>().acceptFriendRequest(id);
+                    context.read<NotificationProvider>().AddFriendRequest(
+                        "Friend Request accepted from ${userName}", [id]);
                   },
                   child: Text("Accept")),
               ElevatedButton(
@@ -47,7 +50,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   onPressed: () {
                     print("Deleting Friend Request ${id} ");
 
-                   context.read<UserProvider>().cancelFriendRequest(id);
+                    context.read<UserProvider>().cancelFriendRequest(id);
                   },
                   child: Text("Decline"))
             ],
@@ -94,8 +97,8 @@ class _FriendRequestState extends State<FriendRequest> {
                 UserModel user = UserModel.fromJson(
                     snapshot.data?.docs[index].data() as Map<String, dynamic>);
 
-                return _friendCard(
-                    '${user.firstName!} ${user.lastName!}', user.email! , user.id);
+                return _friendCard('${user.firstName!} ${user.lastName!}',
+                    user.email!, user.id);
               }),
             );
           },

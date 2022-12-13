@@ -82,4 +82,20 @@ class NotificationProvider with ChangeNotifier {
 
     notificationService.addNotification(temp.toJson(temp));
   }
+
+  void AddFriendRequest(String? content, List friend) {
+    Notifications temp = Notifications(
+      id: "1",
+      fromUserId: userId,
+      toUserId: friend,
+      context: content,
+      title: "Accepted Friend Request",
+      time: DateTime.now(),
+    );
+
+    notificationService.addNotification(temp.toJson(temp));
+  }
+
+
+
 }
