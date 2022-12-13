@@ -57,10 +57,17 @@ class _AddTodoState extends State<AddTodo> {
         suffixIcon: Icon(Icons.event_note),
       ),
       mode: DateTimeFieldPickerMode.dateAndTime,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       onDateSelected: (DateTime value) {
         dealineDateTime = value;
+      },
+      validator: (DateTime? selectedDateTime) {
+        if (selectedDateTime == null) {
+          return 'Please enter a date';
+        }
+        if (selectedDateTime.difference(DateTime.now()).isNegative) {
+          return 'Enter a future Date';
+        }
       },
     );
 
@@ -127,16 +134,20 @@ class _AddTodoState extends State<AddTodo> {
                             height: 20,
                           ),
                           TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            controller: contextController,
-                            textInputAction: TextInputAction.newline,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(15),
-                              hintText: "Content",
-                            ),
-                            maxLines: 10,
-                            minLines: 1,
-                          ),
+                              keyboardType: TextInputType.multiline,
+                              controller: contextController,
+                              textInputAction: TextInputAction.newline,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(15),
+                                hintText: "Content",
+                              ),
+                              maxLines: 10,
+                              minLines: 1,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a title';
+                                }
+                              }),
                           Container(
                             height: 60,
                           ),
@@ -247,12 +258,14 @@ class _AddTodoState extends State<AddTodo> {
 
                     context.read<TodoListProvider>().addTodo(temp);
 
-                
                     final date2 = DateTime.now();
-                    final difference = dealineDateTime?.difference(date2).inDays;
+                    final difference =
+                        dealineDateTime?.difference(date2).inDays;
                     context
                         .read<NotificationProvider>()
-                        .addDeadlineNotification("Only ${difference} days till the deadline", sharedTodo);
+                        .addDeadlineNotification(
+                            "Only ${difference} days till the deadline",
+                            sharedTodo);
                     Navigator.pop(context);
                   }
                 },

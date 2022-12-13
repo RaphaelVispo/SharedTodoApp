@@ -58,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (value.length <= 8) {
-          return 'The length should be more than 8';
+        if (value.length < 8) {
+          return 'The length should be more than 7';
         }
         return null;
       },

@@ -46,7 +46,9 @@ class _SignupPageState extends State<SignupPage> {
         if (selectedDateTime == null) {
           return 'Please enter a date';
         }
-      },
+        if (!selectedDateTime.difference(DateTime.now()).isNegative) {
+          return 'Enter a past Date';
+      }},
       onDateSelected: (DateTime value) {
         print(value);
         birthdayDate = value;
@@ -87,8 +89,8 @@ class _SignupPageState extends State<SignupPage> {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
         }
-        if (value.length <= 8) {
-          return 'The length should be more than 8';
+        if (value.length < 8) {
+          return 'The length should be more than 7';
         }
         return null;
       },
@@ -186,6 +188,11 @@ class _SignupPageState extends State<SignupPage> {
         child: const Text('Back', style: TextStyle(color: Colors.white)),
       ),
     );
+    addspacing(double h) {
+      return Container(
+        height: h,
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -204,11 +211,19 @@ class _SignupPageState extends State<SignupPage> {
                 child: Column(
                   children: [
                     email,
+                    addspacing(10),
                     password,
+                    addspacing(10),
                     firstName,
+                    addspacing(10),
                     lastName,
+                    addspacing(10),
+                    bioText,
+                    addspacing(10),
                     birthday,
+                    addspacing(10),
                     SignupButton,
+                    addspacing(10),
                     backButton
                   ],
                 ))
