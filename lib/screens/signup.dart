@@ -34,6 +34,7 @@ class _SignupPageState extends State<SignupPage> {
     Location userLocation = new Location();
 
     final birthday = DateTimeFormField(
+      key: const Key("DateTimePickerKey"),
       decoration: const InputDecoration(
         hintStyle: TextStyle(color: Colors.black45),
         errorStyle: TextStyle(color: Colors.redAccent),
