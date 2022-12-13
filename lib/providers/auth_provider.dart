@@ -47,8 +47,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   void signUp(String email, String password, String firstName, String lastName,
-      DateTime birthdayDate, LocationData location) {
+      DateTime birthdayDate, LocationData location, String bio) {
     authService.signUp(
-        email, password, firstName, lastName, birthdayDate, location);
+        email, password, firstName, lastName, birthdayDate, location, bio);
   }
 }

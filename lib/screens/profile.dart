@@ -76,8 +76,7 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             'Id: ${user.id} ',
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Container(
@@ -88,8 +87,7 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             'Name: ${user.firstName} ${user.lastName}',
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Container(
@@ -100,8 +98,18 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             'Birthday: ${DateFormat().add_yMMMd().format(user.birthday!)} ',
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20),
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Bio: ${user.bio}',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Container(
@@ -112,12 +120,9 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             'Location: ${user.location?['longitude']} ${user.location?['latitude']} ',
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
-                        
-                     
                       ],
                     ),
                   );

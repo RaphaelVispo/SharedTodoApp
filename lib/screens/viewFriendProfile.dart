@@ -83,6 +83,17 @@ class viewFriendProfile extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
+                            'Bio: ${friend.bio}',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
                             'Location: ${friend.location?['longitude']} ${friend.location?['latitude']} ',
                             textAlign: TextAlign.left,
                             style: TextStyle(

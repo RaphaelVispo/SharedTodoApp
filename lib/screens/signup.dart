@@ -29,6 +29,7 @@ class _SignupPageState extends State<SignupPage> {
     TextEditingController passwordController = TextEditingController();
     TextEditingController firstNameController = TextEditingController();
     TextEditingController lastNameController = TextEditingController();
+    TextEditingController bioController = TextEditingController();
     DateTime? birthdayDate;
     Location userLocation = new Location();
 
@@ -40,8 +41,12 @@ class _SignupPageState extends State<SignupPage> {
         suffixIcon: Icon(Icons.event_note),
       ),
       mode: DateTimeFieldPickerMode.date,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (DateTime? selectedDateTime) {
+        if (selectedDateTime == null) {
+          return 'Please enter a date';
+        }
+      },
       onDateSelected: (DateTime value) {
         print(value);
         birthdayDate = value;
@@ -128,6 +133,24 @@ class _SignupPageState extends State<SignupPage> {
       },
     );
 
+    final bioText = TextFormField(
+      key: const Key("biokeysignup"),
+      controller: bioController,
+      decoration: const InputDecoration(
+        hintText: 'Bio',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+
+        return null;
+      },
+      onChanged: (value) {
+        _formKey.currentState!.validate();
+      },
+    );
+
     final SignupButton = Padding(
       key: const Key("signupbuttonnamekeysignup"),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -143,7 +166,8 @@ class _SignupPageState extends State<SignupPage> {
                 firstNameController.text,
                 lastNameController.text,
                 birthdayDate!,
-                location);
+                location,
+                bioController.text);
             //context.read<UserProvider>();
             Navigator.pop(context);
           }

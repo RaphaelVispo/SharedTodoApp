@@ -55,7 +55,7 @@ class FirebaseAuthAPI {
   }
 
   void signUp(String email, String password, String firstName, String lastName,
-      DateTime birthdayDate, LocationData location) async {
+      DateTime birthdayDate, LocationData location, String bio) async {
     UserCredential credential;
     try {
       credential = await auth.createUserWithEmailAndPassword(
@@ -64,7 +64,7 @@ class FirebaseAuthAPI {
       );
       if (credential.user != null) {
         saveUserToFirestore(credential.user?.uid, email, firstName, lastName,
-            birthdayDate, location);
+            birthdayDate, location, bio);
       }
 
       print('The uiid = ${credential.user?.uid}');
@@ -87,19 +87,14 @@ class FirebaseAuthAPI {
 
   //for adding extra more info aside from the auth
   void saveUserToFirestore(String? uid, String email, String firstName,
-      String lastName, DateTime birthdayDate, LocationData location) async {
+      String lastName, DateTime birthdayDate, LocationData location, String bio) async {
     try {
       await db.collection("users").doc(uid).set({
         "id": uid,
         "email": email,
         "firstName": firstName,
         "lastName": lastName,
-        "birthday":{
-          "month": birthdayDate.month,
-          "day": birthdayDate.day,
-          "year": birthdayDate.year
-
-        } ,
+        "birthday": birthdayDate,
         "location": {
           "longitude": location.longitude,
           "latitude": location.latitude
@@ -108,7 +103,8 @@ class FirebaseAuthAPI {
         "sentFriendRequest": ["0"],
         "friends": ["0"],
         "todo": ["0"],
-        "sharedTodo": ["0"]
+        "sharedTodo": ["0"],
+        "bio": bio,
       });
 
     } on FirebaseException catch (e) {

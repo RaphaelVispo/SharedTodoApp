@@ -57,6 +57,7 @@ class _sharedTodoState extends State<sharedTodo> {
         child: ListTile(
           title: Text(todo.title!),
           subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               addspacing(10),
               Text(todo.context!),

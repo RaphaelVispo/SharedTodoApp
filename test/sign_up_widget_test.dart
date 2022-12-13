@@ -53,7 +53,7 @@ void main() {
 
       final signUpButton = find.byKey(const Key("signup"));
       final emailErrorFinder = find.text('Invalid Email');
-      final passwordErrorFinder = find.text('The length should be more than 6');
+      final passwordErrorFinder = find.text('The length should be more than 8');
       final nullError = find.text('Please enter some text');
 
       await tester.tap(signUpButton);
@@ -93,7 +93,7 @@ void main() {
 
       final signUpButton = find.byKey(const Key("signup"));
       final emailErrorFinder = find.text('Invalid Email');
-      final passwordErrorFinder = find.text('The length should be more than 6');
+      final passwordErrorFinder = find.text('The length should be more than 8');
 
       await tester.tap(signUpButton);
 

@@ -19,6 +19,7 @@ class UserModel {
   Map? location;
   List? todo;
   List? sharedTodo;
+  String? bio;
 
   UserModel(
       {required this.id,
@@ -31,7 +32,8 @@ class UserModel {
       this.sentFriendRequest,
       this.friends,
       this.todo,
-      this.sharedTodo});
+      this.sharedTodo,
+      this.bio});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     //print(json);
@@ -47,7 +49,8 @@ class UserModel {
         sentFriendRequest: json['sentFriendRequest'],
         friends: json['friends'],
         todo: json['todo'],
-        sharedTodo: json['sharedTodo']);
+        sharedTodo: json['sharedTodo'],
+        bio: json['bio']);
     //print(user.friends);
     return user;
   }
