@@ -48,7 +48,7 @@ class _AddTodoState extends State<AddTodo> {
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
 
     List<QueryDocumentSnapshot<Object?>>? documents = [];
-    List<String> sharedTodo = ["0"];
+    List<String> sharedTodo = [];
 
     final deadline = DateTimeFormField(
       key: const Key("deadlineForm"),
@@ -259,7 +259,7 @@ class _AddTodoState extends State<AddTodo> {
                         context: contextController.text,
                         sharedTo: sharedTodo,
                         deadline: dealineDateTime,
-                        editHistory: ['0']);
+                        editHistory: []);
 
                     context.read<TodoListProvider>().addTodo(temp);
 

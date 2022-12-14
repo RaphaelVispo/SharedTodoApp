@@ -46,9 +46,9 @@ class AuthProvider with ChangeNotifier {
     authService.signOut();
   }
 
-  void signUp(String email, String password, String firstName, String lastName,
-      DateTime birthdayDate, LocationData location, String bio) {
-    authService.signUp(
+  Future<String> signUp(String email, String password, String firstName, String lastName,
+      DateTime birthdayDate, LocationData location, String bio) async{
+    return authService.signUp(
         email, password, firstName, lastName, birthdayDate, location, bio);
   }
 }

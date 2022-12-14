@@ -49,7 +49,8 @@ class _SignupPageState extends State<SignupPage> {
         }
         if (!selectedDateTime.difference(DateTime.now()).isNegative) {
           return 'Enter a past Date';
-      }},
+        }
+      },
       onDateSelected: (DateTime value) {
         print(value);
         birthdayDate = value;
@@ -92,6 +93,12 @@ class _SignupPageState extends State<SignupPage> {
         }
         if (value.length < 8) {
           return 'The length should be more than 7';
+        }
+
+        if (!RegExp(
+                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+            .hasMatch(value)) {
+          return 'The password should have a special character, and both uppercase and lowercase letters.';
         }
         return null;
       },
@@ -154,29 +161,48 @@ class _SignupPageState extends State<SignupPage> {
       },
     );
 
+  
+
     final SignupButton = Padding(
       key: const Key("signupbuttonnamekeysignup"),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
-        key: const Key("signup"),
-        onPressed: () async {
-          //call the auth provider here
-          if (_formKey.currentState!.validate()) {
-            LocationData location = await userLocation.getLocation();
-            context.read<AuthProvider>().signUp(
-                emailController.text,
-                passwordController.text,
-                firstNameController.text,
-                lastNameController.text,
-                birthdayDate!,
-                location,
-                bioController.text);
-            //context.read<UserProvider>();
-            Navigator.pop(context);
-          }
-        },
-        child: const Text('Sign up', style: TextStyle(color: Colors.white)),
-      ),
+          key: const Key("signup"),
+          child: const Text('Sign up', style: TextStyle(color: Colors.white)),
+          onPressed: () async {
+            //call the auth provider here
+            if (_formKey.currentState!.validate()) {
+              LocationData location = await userLocation.getLocation();
+              String comment = await context.read<AuthProvider>().signUp(
+                  emailController.text,
+                  passwordController.text,
+                  firstNameController.text,
+                  lastNameController.text,
+                  birthdayDate!,
+                  location,
+                  bioController.text);
+              if (comment == 'The account already exists for that email.') {
+                return showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("The email must be unique"),
+                        titleTextStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 20),
+                        actionsOverflowButtonSpacing: 20,
+                        actions: [
+                          ElevatedButton(onPressed: () {Navigator.pop(context);}, child: Text("Back")),
+                        ],
+                        content: Text(comment),
+                      );
+                    });
+              } else {
+                Navigator.pop(context);
+              }
+            }
+          }),
     );
 
     final backButton = Padding(

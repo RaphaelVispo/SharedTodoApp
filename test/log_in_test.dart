@@ -25,7 +25,7 @@ void main() {
 
     
       await tester.enterText(userNameField, "user@gmail.com");
-      await tester.enterText(passwordField, "111111111");
+      await tester.enterText(passwordField, "1111111!Aa");
 
       final loginButton = find.byKey(const Key("loginButton"));
       final emailErrorFinder = find.text('Invalid Email');

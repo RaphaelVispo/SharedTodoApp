@@ -7,6 +7,7 @@
   and test cases
 */
 
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -55,9 +56,10 @@ class FirebaseAuthAPI {
     return comment;
   }
 
-  void signUp(String email, String password, String firstName, String lastName,
+  Future<String> signUp(String email, String password, String firstName, String lastName,
       DateTime birthdayDate, LocationData location, String bio) async {
     UserCredential credential;
+    String comment="";
     try {
       credential = await auth.createUserWithEmailAndPassword(
         email: email,
@@ -73,13 +75,16 @@ class FirebaseAuthAPI {
       //possible to return something more useful
       //than just print an error message to improve UI/UX
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        comment = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        comment = 'The account already exists for that email.';
       }
     } catch (e) {
-      print(e);
+      comment = e.toString();
+      
     }
+    return comment;
+    
   }
 
   void signOut() async {
