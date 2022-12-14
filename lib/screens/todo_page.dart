@@ -48,6 +48,7 @@ class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
     context.read<UserProvider>().getUser();
+    context.read<TodoListProvider>().fetchTodos();
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     final Future<DocumentSnapshot> userInfo =
         context.watch<UserProvider>().info;
