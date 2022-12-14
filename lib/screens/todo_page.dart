@@ -36,16 +36,18 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-  int? count;
+  int? count, count2;
   @override
   void initState() {
     // TODO: implement initState
     count = 0;
+    count2 = 0;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.read<UserProvider>().getUser();
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     final Future<DocumentSnapshot> userInfo =
         context.watch<UserProvider>().info;
@@ -138,7 +140,7 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
-    printSharedTo(List? sharedTo) {
+    printSharedTo(Todo todo, List? sharedTo) {
       context.read<UserProvider>().getAllFriend();
       Stream<QuerySnapshot> friendsStream =
           context.watch<UserProvider>().friends;
@@ -164,12 +166,18 @@ class _TodoPageState extends State<TodoPage> {
           String sharedText = 'Shared to: ';
 
           sharedTo?.remove(user?.id);
-          if (sharedTo!.length == 1) {
+
+          if (sharedTo!.length == 0) {
             return Text('Todo is currently private');
           }
+
           for (QueryDocumentSnapshot friend in documents!) {
             UserModel friendinfo =
                 UserModel.fromJson(friend.data() as Map<String, dynamic>);
+
+            if (!user!.friends!.contains(friend.id)) {
+              sharedTo.remove(friend.id);
+            }
 
             if (sharedTo.contains(friendinfo.id)) {
               sharedText = sharedText +
@@ -201,10 +209,10 @@ class _TodoPageState extends State<TodoPage> {
       );
     }
 
-    showTodos(Todo todo, int index, int ?len) {
+    showTodos(Todo todo, int index, int? len) {
       if (count! < len!) {
         count = count! + 1;
-      
+
         final date2 = DateTime.now();
         final differences = todo.deadline?.difference(date2).inDays;
 
@@ -226,7 +234,7 @@ class _TodoPageState extends State<TodoPage> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              printSharedTo(todo.sharedTo),
+              printSharedTo(todo, todo.sharedTo),
               addspacing(10),
               Text(todo.context!),
               addspacing(10),
@@ -365,10 +373,33 @@ class _TodoPageState extends State<TodoPage> {
                         Todo todo = Todo.fromJson(snapshot.data?.docs[index]
                             .data() as Map<String, dynamic>);
 
+                        print((snapshot.data?.docs)!.length);
+
+                        if (count2! < (snapshot.data?.docs)!.length) {
+                          if (todo.userId == user?.id) {
+                            List tobeRemoved = todo.sharedTo!
+                                .toSet()
+                                .difference(user!.friends!.toSet())
+                                .toList();
+
+                            // print("tode: ${tobeRemoved}");
+
+                            todo.sharedTo?.removeWhere(
+                                (element) => tobeRemoved.contains(element));
+
+                            // print(todo.title);
+                            // print(todo.sharedTo);
+
+                            context.read<TodoListProvider>().editTodo(todo);
+                          }
+                          count2 = count2! + 1;
+                        }
+
                         if (todo.userId == user?.id) {
                           return Column(
                             children: [
-                              showTodos(todo, index, snapshot.data?.docs.length),
+                              showTodos(
+                                  todo, index, snapshot.data?.docs.length),
                               addspacing(20),
                             ],
                           );

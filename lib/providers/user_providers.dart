@@ -21,12 +21,11 @@ class UserProvider with ChangeNotifier {
   Stream<QuerySnapshot>? _friendList;
   Stream<QuerySnapshot>? _sentFriendRequest;
 
-  Future<DocumentSnapshot>? user;
+  Future<DocumentSnapshot>? _user;
   late UserModel userModel;
 
   UserProvider({required this.userId}) {
     userService = FirebaseUserAPI();
-    user = userService.getuserInfo(this.userId!);
     getUserData();
   }
 
@@ -34,7 +33,11 @@ class UserProvider with ChangeNotifier {
   Stream<QuerySnapshot> get allUser => _allUsers!;
   Stream<QuerySnapshot> get friends => _friendList!;
   Stream<QuerySnapshot> get sentFriendRequest => _sentFriendRequest!;
-  Future<DocumentSnapshot> get info => user!;
+  Future<DocumentSnapshot> get info => _user!;
+
+  getUser() {
+    _user = userService.getuserInfo(this.userId!);
+  }
 
   void getUserData() async {
     //getting the current user's data
@@ -49,11 +52,9 @@ class UserProvider with ChangeNotifier {
       getAllFriendRequest();
       getAllUsers();
       getSentFriendRequest();
-
     } catch (e) {
       print("There is no user");
     }
-
   }
 
   void getAllFriendRequest() {

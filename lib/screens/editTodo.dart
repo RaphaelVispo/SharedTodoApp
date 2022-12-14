@@ -82,7 +82,7 @@ class _EditTodoState extends State<EditTodo> {
   @override
   Widget build(BuildContext context) {
     Future<DocumentSnapshot<Object?>>? userInfo =
-        context.watch<UserProvider>().user;
+        context.watch<UserProvider>().info;
     context.read<UserProvider>().getAllFriend();
     Stream<QuerySnapshot> freindsStream = context.watch<UserProvider>().friends;
     List? sharedTodo;
@@ -90,7 +90,7 @@ class _EditTodoState extends State<EditTodo> {
 
     addEditHistory() async {
       DocumentSnapshot<Object?>? user = await userInfo;
-      users = UserModel.fromJson(user?.data() as Map<String, dynamic>);
+      users = UserModel.fromJson(user.data() as Map<String, dynamic>);
 
       //print('edit histort ${widget.todo.editHistory}');
 

@@ -22,7 +22,7 @@ class FriendRequest extends StatefulWidget {
 }
 
 class _FriendRequestState extends State<FriendRequest> {
-  Card _friendCard(String userName, String name, String id) {
+  Card _friendCard(String userName, String name, String id, UserModel ownUser) {
     return Card(
         child: Padding(
       padding: EdgeInsets.all(10),
@@ -42,7 +42,7 @@ class _FriendRequestState extends State<FriendRequest> {
 
                     context.read<UserProvider>().acceptFriendRequest(id);
                     context.read<NotificationProvider>().AddFriendRequest(
-                        "Friend Request accepted from ${userName}", [id]);
+                        "Friend Request accepted from ${ownUser.firstName}", [id]);
                   },
                   child: Text("Accept")),
               ElevatedButton(
@@ -64,6 +64,7 @@ class _FriendRequestState extends State<FriendRequest> {
   Widget build(BuildContext context) {
     //auto update
     context.read<UserProvider>().getAllFriendRequest();
+    UserModel ownUser = context.watch<UserProvider>().userModel;
 
     Stream<QuerySnapshot> todosStream =
         context.watch<UserProvider>().friendRequests;
@@ -98,7 +99,7 @@ class _FriendRequestState extends State<FriendRequest> {
                     snapshot.data?.docs[index].data() as Map<String, dynamic>);
 
                 return _friendCard('${user.firstName!} ${user.lastName!}',
-                    user.email!, user.id);
+                    user.email!, user.id,ownUser );
               }),
             );
           },

@@ -28,16 +28,15 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: ((context) => AuthProvider())),
+        ChangeNotifierProvider(create: ((context) => TodoListProvider())),
+
+        
         ChangeNotifierProxyProvider<AuthProvider, UserProvider>(
           create: (context) => UserProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
           update: (context, auth, previous) =>
               UserProvider(userId: auth.userObj?.uid ??'0'),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, TodoListProvider>(
-          create: (context) => TodoListProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
-          update: (context, auth, previous) =>
-              TodoListProvider(userId: auth.userObj?.uid??'0'),
-        ),
+        
         ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
           create: (context) => NotificationProvider(userId: 'wwI2FliOMSVinU0m55Oz3xII6Cf1'),
           update: (context, auth, previous) =>

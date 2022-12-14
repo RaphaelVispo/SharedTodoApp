@@ -38,10 +38,11 @@ This shows the notifications of the user
 * Todo: the user can chooose the todo that will be share to. The user can only pick from there friends list
 * Notification: There will ba a notification page that will be shown. THe deadline nearing, Accepted friend request and the edited todos
 
-
 ## Challenges faced
-* challenges face include getting the user's id form the data base
-* Understanding Streams and Future builder.
+* Challenges face include getting the user's id form the data base
+* Understanding Streams and Future builder
+* When unfriending, todos with the user's unfriended will not have an authorization to the shared todos
+
 
 ## Test Cases
 ### Happy Paths
@@ -50,4 +51,4 @@ This shows the notifications of the user
 
 
 ### Unhapppy Paths
-* having null nad invalid input for the login and sign up page
+* Having null and invalid input for the login and sign up page

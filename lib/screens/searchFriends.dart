@@ -9,7 +9,9 @@ Program Description: View, Add and delete friends
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_models.dart';
+import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_providers.dart';
 import 'package:week7_networking_discussion/screens/viewFriendProfile.dart';
 
@@ -24,32 +26,6 @@ class _SearchFriendsState extends State<SearchFriends> {
   TextEditingController _searchController = TextEditingController();
   String searchText = '';
   List<QueryDocumentSnapshot<Object?>>? documents = [];
-
-  Card _friendCard(String userName, String name, String id, UserModel friend) {
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(userName),
-            subtitle: Text(name),
-            onTap: () {
-              Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>  viewFriendProfile(friend: friend,)),
-        );
-            },
-            trailing: ElevatedButton(
-              child: Text("Unfriend"),
-              onPressed: () {
-                print("Unfreind user: ${name} id: ${id}");
-                context.read<UserProvider>().unfriend(id);
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   TextField _search() {
     return TextField(
@@ -73,8 +49,77 @@ class _SearchFriendsState extends State<SearchFriends> {
   @override
   Widget build(BuildContext context) {
     context.read<UserProvider>().getAllFriend();
+    // context.read<UserProvider>().getUser();
+    UserModel user = context.watch<UserProvider>().userModel;
 
-    Stream<QuerySnapshot> todosStream = context.watch<UserProvider>().friends;
+    Stream<QuerySnapshot> friendStream = context.watch<UserProvider>().friends;
+
+    Card _friendCard(
+        String userName, String name, String id, UserModel friend) {
+      return Card(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(userName),
+              subtitle: Text(name),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => viewFriendProfile(
+                            friend: friend,
+                          )),
+                );
+              },
+              trailing: ElevatedButton(
+                child: Text("Unfriend"),
+                onPressed: () {
+                  print("Unfreind user: ${name} id: ${id}");
+                  context.read<UserProvider>().unfriend(id);
+
+                  // FutureBuilder(
+                  //   future: user,
+                  //   builder: (context, snapshot) {
+                  //     UserModel users = UserModel.fromJson(
+                  //         snapshot.data?.data() as Map<String, dynamic>);
+
+                  //     print("Unfreind user: ${name} id: ${id}");
+                  //     // context.read<UserProvider>().unfriend(id);
+                  //     print(user);
+
+                  //     StreamBuilder(
+                  //       stream: todosStream,
+                  //       builder: (context, snapshot) {
+                  //         documents = snapshot.data?.docs;
+                  //         for (QueryDocumentSnapshot<Object?> todoData
+                  //             in documents!) {
+                  //           Todo todo = Todo.fromJson(
+                  //               todoData.data() as Map<String, dynamic>);
+                  //           print(todo);
+                  //           if (todo.userId == users.id) {
+                  //             todo.sharedTo = todo.sharedTo!
+                  //                 .toSet()
+                  //                 .difference(users.friends!.toSet())
+                  //                 .toList();
+
+                  //             print(todo.sharedTo);
+                  //             context.read<TodoListProvider>().editTodo(todo);
+                  //           }
+                  //         }
+                  //         return SizedBox();
+                  //       },
+                  //     );
+
+                  //     return SizedBox();
+                  //   },
+                  // );
+                },
+              ),
+            )
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -87,7 +132,7 @@ class _SearchFriendsState extends State<SearchFriends> {
                 _search(),
                 Expanded(
                   child: StreamBuilder(
-                    stream: todosStream,
+                    stream: friendStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -123,9 +168,11 @@ class _SearchFriendsState extends State<SearchFriends> {
                               documents?[index].data() as Map<String, dynamic>);
 
                           return _friendCard(
-                              '${user.firstName!} ${user.lastName!}',
-                              '${user.email}',
-                              user.id, user);
+                            '${user.firstName!} ${user.lastName!}',
+                            '${user.email}',
+                            user.id,
+                            user,
+                          );
                         }),
                       );
                     },

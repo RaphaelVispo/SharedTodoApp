@@ -63,14 +63,14 @@ class _editSharedTodoState extends State<editSharedTodo> {
   @override
   Widget build(BuildContext context) {
     Future<DocumentSnapshot<Object?>>? userInfo =
-        context.watch<UserProvider>().user;
+        context.watch<UserProvider>().info;
     context.read<UserProvider>().getAllFriend();
     UserModel? users;
 
     addEditHistory() async {
       DocumentSnapshot<Object?>? user = await userInfo;
        users=
-          UserModel.fromJson(user?.data() as Map<String, dynamic>);
+          UserModel.fromJson(user.data() as Map<String, dynamic>);
 
       //print('edit histort ${widget.todo.editHistory}');
 

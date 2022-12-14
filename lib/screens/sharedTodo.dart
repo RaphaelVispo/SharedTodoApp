@@ -51,6 +51,7 @@ class _sharedTodoState extends State<sharedTodo> {
     }
 
     showTodos(Todo todo, int index) {
+
       return Card(
           child: Padding(
         padding: EdgeInsets.all(10),
@@ -146,7 +147,9 @@ class _sharedTodoState extends State<sharedTodo> {
                       Todo todo = Todo.fromJson(snapshot.data?.docs[index]
                           .data() as Map<String, dynamic>);
 
-                      if (todo.sharedTo!.contains(user?.id)) {
+                      
+
+                      if (todo.sharedTo!.contains(user?.id) && user!.friends!.contains(todo.userId)) {
                         return Column(
                           children: [
                             showTodos(todo, index),
