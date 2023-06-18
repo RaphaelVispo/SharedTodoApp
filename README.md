@@ -1,5 +1,4 @@
 # Shared Todo App
-## CMSC 23 Poject
 
 ## Student Information 
 * Name : Raphael S. Vispo
