@@ -1,9 +1,5 @@
 # Shared Todo App
 
-## Student Information 
-* Name : Raphael S. Vispo
-* Strudent Number : 2021-10210
-* Section : D3L
 
 ## App Description 
 A todo app that uses CRUD methodologies, authentication and authorization. The App has a friends feature for sharing of the todos. The app also allows picking of freinds for sharing of the todos.
