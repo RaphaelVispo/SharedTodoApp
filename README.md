@@ -5,29 +5,6 @@
 A todo app that uses CRUD methodologies, authentication and authorization. The App has a friends feature for sharing of the todos. The app also allows picking of freinds for sharing of the todos.
 
 
-## Screenshots
-
-Onced logged in:
-
-#### Todo Page
-![Todo app page](screenshots/todopage.PNG)
-
-#### Todo app drawer
-
-clicking the hamburget icon from the Todo page
-
-![Todo app drawer](screenshots/Drawer.PNG)
-
-#### Friends
-
-clicking the add icon from the todo page
-
-![friends todo](screenshots/friends.PNG)
-
-####  UserProfile Todo
-This shows the notifications of the user
-![notification page](screenshots/notification.PNG)
-
 ## Things that you did in the code
 * Friends feature: Add add Unfriend friends with friend request.
 * Todo: the user can chooose the todo that will be share to. The user can only pick from there friends list
